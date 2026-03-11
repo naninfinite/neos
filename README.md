@@ -1,12 +1,12 @@
 # NEOS
 
-A fresh rebuild of the user's browser-based operating system / portfolio project.
+A fresh rebuild of the browser-based operating system / portfolio project.
 
 ## Status
 
 Pre-implementation shell scaffold.
 
-This repository is the **new source of truth for code**. It is a clean rebuild and must not inherit legacy architecture by default.
+This repository is the new source of truth for code. It is a clean rebuild and must not inherit legacy architecture by default.
 
 ## Project mode
 
@@ -49,7 +49,7 @@ The previous Terminal-OS codebase may be inspected for:
 - content structure
 - prior UX flows
 
-It must **not** be used as the architectural base of this rebuild.
+It must not be used as the architectural base of this rebuild.
 
 ## Agent roles
 
