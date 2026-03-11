@@ -38,6 +38,8 @@ This is intentional.
 
 The goal was not to build the operating system yet, but to replace the starter placeholder with one that belongs to the project.
 
+![Stage 1A shell home](../assets/01-stage-1a/shell-home.png)
+
 ## Important code
 
 ```tsx
