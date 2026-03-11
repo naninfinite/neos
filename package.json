@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:visual": "playwright test",
+    "timeline:capture:stage-1a": "node scripts/timeline/capture-stage-1a.mjs"
   },
   "dependencies": {
     "react": "^19.2.0",
