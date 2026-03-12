@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
-import { DesktopShell } from './shell/DesktopShell';
+import { SiteShell } from './shell/SiteShell';
 
 export default function App(): ReactElement {
-  return <DesktopShell />;
+  return <SiteShell />;
 }
