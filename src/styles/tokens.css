@@ -1,0 +1,35 @@
+:root {
+  --z-wallpaper: 1;
+  --z-desktop-surface: 2;
+  --z-taskbar: 4;
+  --z-overlay: 5;
+  --z-boot: 10;
+
+  --taskbar-height: 48px;
+  --window-titlebar-height: 36px;
+
+  --color-bg-base: #f0f0f5;
+  --color-bg-surface: rgba(255, 255, 255, 0.55);
+  --color-bg-elevated: rgba(255, 255, 255, 0.72);
+  --color-glass: rgba(255, 255, 255, 0.45);
+  --color-glass-border: rgba(255, 255, 255, 0.5);
+  --color-accent-primary: #00c878;
+  --color-accent-secondary: #3b82f6;
+  --color-accent-danger: #ef4444;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #6b6b80;
+  --color-border-subtle: rgba(0, 0, 0, 0.06);
+  --color-border-strong: rgba(0, 0, 0, 0.12);
+  --color-shadow: rgba(0, 0, 0, 0.08);
+
+  --font-ui: 'Inter', 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Consolas', monospace;
+  --font-display: 'Space Grotesk', 'Inter', 'Segoe UI', sans-serif;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+}

@@ -1,59 +1,54 @@
-# Stage 1A — Shell Scaffold
+# Stage 1A - First Shell UI Pass
 
 ## What we were trying to do
 
-Turn the fresh repo from a generic Vite starter into the first recognisable version of NEOS.
+Replace the bootstrap placeholder with a real first-look shell that sets the visual direction for NEOS.
 
 ## What changed
 
-- Created the new rebuild repository
-- Added the spec-first documentation set
-- Added root guidance files such as `README.md` and `AGENTS.md`
-- Replaced the default Vite demo with a minimal NEOS placeholder shell
-- Added the first source folder structure for the future runtime
+- Added a fixed desktop shell canvas with a light liquid-glass wallpaper
+- Added a glass-style bottom taskbar with launcher trigger, empty task zone, and live clock
+- Added a full-screen launcher overlay with search and grouped placeholder app cards
+- Added a 2-second static boot overlay that reveals the shell
+- Split the shell into small focused components for incremental growth
 
 ## Why this matters
 
-This is the point where the project stopped being a starter template and became a real product foundation.
+This is the first version that feels like a product shell instead of a scaffolding message.
 
-It established:
-- the new implementation target
-- the document authority order
-- the first visible shell identity
-- the initial place where the runtime will grow
+It establishes:
+- a concrete visual language ("liquid glass")
+- the first real OS-like landing experience
+- a clean baseline for upcoming windowing and runtime work
 
 ## In plain English
 
-This step was like taking over an empty building and putting up the first walls, sign, and floor plan.
+This step was like replacing a construction sign with an actual lobby.
 
-Before this, the project was just a starter kit.
-
-After this, it became the beginning of a real system with a name, structure, and direction.
+Before this, NEOS showed a single placeholder card.
+After this, it behaves like a desktop shell with a taskbar and launcher flow.
 
 ## What the UI looked like
 
-At this stage, the app shows a simple shell bootstrap screen instead of the default Vite counter demo.
-
-This is intentional.
-
-The goal was not to build the operating system yet, but to replace the starter placeholder with one that belongs to the project.
+At this stage, the app opens into a bright liquid-glass desktop surface with a glass taskbar and launcher entry point.
+No windows are open by default, which keeps the first screen calm and clear.
 
 ![Stage 1A shell home](../assets/01-stage-1a/shell-home.png)
 
 ## Important code
 
 ```tsx
-export default function App() {
+export function DesktopShell(): ReactElement {
   return (
-    <main className="app-shell">
-      <section className="boot-panel">
-        <p className="boot-label">NEOS</p>
-        <h1 className="boot-title">Shell bootstrap</h1>
-        <p className="boot-copy">
-          Runtime scaffold initialised. Windowing, services, and apps will be
-          mounted here.
-        </p>
-      </section>
+    <main className="neosShell">
+      <div className="wallpaper" aria-hidden="true" />
+      <section aria-label="Desktop surface" className="desktopSurface" />
+      <Taskbar ... />
+      {launcherOpen ? <LauncherOverlay apps={launcherApps} onClose={...} /> : null}
+      {bootVisible ? <BootOverlay /> : null}
     </main>
   );
 }
+```
+
+This is the first true shell composition: wallpaper, desktop surface, taskbar, launcher overlay, and boot overlay.

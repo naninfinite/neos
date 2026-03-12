@@ -135,6 +135,11 @@ const browser = await chromium.launch();
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 960 } });
   await page.goto(previewUrl, { waitUntil: 'load' });
+  await page.waitForSelector('[aria-label="Boot overlay"]', {
+    state: 'hidden',
+    timeout: 6_000,
+  });
+  await page.waitForSelector('[aria-label="Taskbar"]', { timeout: 2_000 });
   await page.screenshot({ path: outputPath, fullPage: true });
 } finally {
   await browser.close();

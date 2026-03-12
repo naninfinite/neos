@@ -17,7 +17,7 @@
           changed, and what the project looked like as it evolved.
         </p>
         <p class="muted">
-          Current coverage: Stage 1A foundation and shell scaffold.
+          Current coverage: Stage 1A first shell UI pass.
         </p>
       </section>
 
@@ -38,49 +38,43 @@
 
       <article class="milestone">
         <p class="kicker">Stage 1A</p>
-        <h2>Shell Scaffold</h2>
+        <h2>First Shell UI Pass</h2>
         <p>
-          This was the point where the new repo stopped being a generic Vite
-          starter and became the beginning of NEOS.
+          This milestone replaced the bootstrap placeholder with the first real
+          NEOS shell.
         </p>
         <p>
-          The team created the new rebuild repository, added the spec pack and
-          root guidance files, and replaced the default starter demo with a
-          simple shell placeholder.
+          The desktop now has a liquid-glass wallpaper surface, a glass-style taskbar,
+          a launcher overlay, and a short static boot handoff before the shell
+          appears.
         </p>
         <p>
-          In plain English, this was like taking over an empty building and
-          putting up the first walls, the sign at the entrance, and the floor
-          plan for the rooms that will come later.
+          In plain English, this was the step from a construction sign to an
+          actual lobby: the system now looks and behaves like a desktop shell.
         </p>
         <img
           src="../assets/01-stage-1a/shell-home.png"
-          alt="Stage 1A shell placeholder screen"
+          alt="Stage 1A first shell UI screen"
         />
       </article>
 
       <section class="code-card">
         <p class="kicker">Important code</p>
-        <h3>The first visible shell</h3>
-        <pre><code>export default function App() {
+        <h3>The first shell composition</h3>
+        <pre><code>export function DesktopShell(): ReactElement {
   return (
-    &lt;main className="app-shell"&gt;
-      &lt;section className="boot-panel"&gt;
-        &lt;p className="boot-label"&gt;NEOS&lt;/p&gt;
-        &lt;h1 className="boot-title"&gt;Shell bootstrap&lt;/h1&gt;
-        &lt;p className="boot-copy"&gt;
-          Runtime scaffold initialised. Windowing, services, and apps will be
-          mounted here.
-        &lt;/p&gt;
-      &lt;/section&gt;
+    &lt;main className="neosShell"&gt;
+      &lt;div className="wallpaper" aria-hidden="true" /&gt;
+      &lt;section aria-label="Desktop surface" className="desktopSurface" /&gt;
+      &lt;Taskbar ... /&gt;
+      {launcherOpen ? &lt;LauncherOverlay apps={launcherApps} onClose={...} /&gt; : null}
+      {bootVisible ? &lt;BootOverlay /&gt; : null}
     &lt;/main&gt;
   );
 }</code></pre>
         <p>
-          This code defines the first screen the project shows. It does not yet
-          build the operating system itself. Instead, it deliberately replaces
-          the starter demo with a project-specific placeholder so the rebuild
-          has a clear beginning.
+          This layout establishes the first usable shell surface while keeping
+          runtime scope intentionally narrow.
         </p>
       </section>
     </main>

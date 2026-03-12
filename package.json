@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview --host 127.0.0.1 --port 4173 --strictPort",
-    "test:visual": "playwright test",
+    "test:visual": "npm run build && playwright test",
     "timeline:capture:stage-1a": "node scripts/timeline/capture-stage-1a.mjs",
     "timeline:pdf": "node scripts/timeline/export-timeline-pdf.mjs"
   },

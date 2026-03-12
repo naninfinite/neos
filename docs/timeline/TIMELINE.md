@@ -17,9 +17,10 @@ It is written to make the project understandable to both technical and non-techn
 
 ## Current status
 
-The project is in early rebuild setup.
+Stage 1A is now implemented as the first visible shell UI pass.
 
-The codebase has been re-initialised as a fresh repo with a spec-driven workflow.
+The project has moved from placeholder bootstrap text to a real desktop shell
+baseline with taskbar, launcher overlay, and boot placeholder.
 
 ## How to read this
 
@@ -31,8 +32,11 @@ The codebase has been re-initialised as a fresh repo with a spec-driven workflow
 
 Milestones will be added here as the project develops.
 
-### Planned first milestones
+### Planned next milestones
 
-- Stage 1A — repo scaffold, spec pack, root docs, placeholder shell
 - Stage 1B — runtime folder structure, initial services/core shell
 - Stage 2 — first functional window manager
+
+### Completed milestone highlights
+
+- Stage 1A — first shell UI pass (liquid-glass wallpaper, glass taskbar, launcher overlay, boot placeholder)
