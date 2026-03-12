@@ -40,16 +40,17 @@
         <p class="kicker">Stage 1A</p>
         <h2>First Shell UI Pass</h2>
         <p>
-          This milestone finalized the navigation boundary model between the
-          site shell and the ME.EXE OS environment.
+          This milestone strengthened the HOME landing composition while
+          preserving the scoped ME.EXE OS boundary.
         </p>
         <p>
-          The top-level site now uses a global channel bar and HOME hub panels,
-          while the taskbar and launcher exist only inside ME.EXE.
+          HOME now presents a hero-led channel surface layout, and channel
+          switching moved to a secondary quick-switch overlay. ME.EXE still
+          owns taskbar and launcher locally.
         </p>
         <p>
-          In plain English, this made the hierarchy clear: the site is
-          multi-channel, and the OS simulation is contained where it belongs.
+          In plain English, landing now feels deliberate and substantial without
+          collapsing into a tile-browser or smart-TV style menu.
         </p>
         <img
           src="../assets/01-stage-1a/shell-home.png"
@@ -59,23 +60,23 @@
 
       <section class="code-card">
         <p class="kicker">Important code</p>
-        <h3>Scoped Shell Composition</h3>
+        <h3>HOME Composition + Secondary Switcher</h3>
         <pre><code>export function SiteShell(): ReactElement {
   return (
     &lt;main className="neosShell"&gt;
       &lt;div className="wallpaper" aria-hidden="true" /&gt;
-      &lt;ChannelBar activeChannel={activeChannel} onNavigate={setActiveChannel} /&gt;
+      &lt;ChannelBar ... onOpenSwitcher={() =&gt; setSwitcherOpen(true)} /&gt;
       &lt;div className="channelViewport"&gt;
         &lt;ChannelView channel={activeChannel} onNavigate={setActiveChannel} /&gt;
       &lt;/div&gt;
+      {switcherOpen ? &lt;ChannelSwitcher ... /&gt; : null}
       {bootVisible ? &lt;BootOverlay /&gt; : null}
     &lt;/main&gt;
   );
 }</code></pre>
         <p>
-          This separates global channel navigation from local in-channel
-          navigation, so ME.EXE can own the taskbar without imposing it
-          everywhere.
+          This keeps channel switching available but secondary, while preserving
+          ME.EXE as the contained OS environment.
         </p>
       </section>
     </main>

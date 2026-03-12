@@ -17,11 +17,11 @@ It is written to make the project understandable to both technical and non-techn
 
 ## Current status
 
-Stage 1A is implemented as a channel-based shell with scoped OS boundaries.
+Stage 1A is implemented as a stronger HOME-led shell with scoped OS boundaries.
 
-The project has moved from a global OS shell toward a clearer model:
-site-level channel navigation on top, with ME.EXE as the contained OS
-environment and taskbar owner.
+The project now lands with a hero-led home composition and secondary
+quick-switch channel navigation, while keeping ME.EXE as the contained
+taskbar-owning OS channel.
 
 ## How to read this
 
@@ -40,4 +40,4 @@ Milestones will be added here as the project develops.
 
 ### Completed milestone highlights
 
-- Stage 1A — first shell UI pass (channel bar + home panels + ME-local taskbar, heavy liquid-glass styling, boot placeholder)
+- Stage 1A — first shell UI pass (hero HOME composition, secondary quick-switch nav, ME-local taskbar, heavy liquid-glass styling, boot placeholder)
