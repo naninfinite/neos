@@ -17,10 +17,10 @@ It is written to make the project understandable to both technical and non-techn
 
 ## Current status
 
-Stage 1A is now implemented as the first visible shell UI pass.
+Stage 1A is implemented as a desktop-first shell UI pass.
 
-The project has moved from placeholder bootstrap text to a real desktop shell
-baseline with taskbar, launcher overlay, and boot placeholder.
+The project has moved from placeholder text and launcher-first discovery to a
+panel-based desktop landing with visible core surfaces.
 
 ## How to read this
 
@@ -39,4 +39,4 @@ Milestones will be added here as the project develops.
 
 ### Completed milestone highlights
 
-- Stage 1A — first shell UI pass (liquid-glass wallpaper, glass taskbar, launcher overlay, boot placeholder)
+- Stage 1A — first shell UI pass (desktop preview panels, heavy liquid-glass styling, taskbar + launcher backup, boot placeholder)

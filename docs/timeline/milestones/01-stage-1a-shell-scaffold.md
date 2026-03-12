@@ -2,36 +2,35 @@
 
 ## What we were trying to do
 
-Replace the bootstrap placeholder with a real first-look shell that sets the visual direction for NEOS.
+Replace the launcher-first landing with a true desktop-first arrival while keeping a modern Liquid Glass style.
 
 ## What changed
 
-- Added a fixed desktop shell canvas with a light liquid-glass wallpaper
-- Added a glass-style bottom taskbar with launcher trigger, empty task zone, and live clock
-- Added a full-screen launcher overlay with search and grouped placeholder app cards
-- Added a 2-second static boot overlay that reveals the shell
-- Split the shell into small focused components for incremental growth
+- Added a visible desktop panel grid on landing (ME.EXE, YOU.EXE, THIRD.EXE, HOME)
+- Kept the glass taskbar and launcher, but moved launcher to secondary access
+- Kept the 2-second boot overlay handoff into the desktop
+- Updated shell styling to heavy Liquid Glass depth and refraction cues
+- Kept panel content as lightweight previews (not running app instances)
 
 ## Why this matters
 
-This is the first version that feels like a product shell instead of a scaffolding message.
+This changed the first impression from "empty desktop" to "project surfaces are visible immediately."
 
 It establishes:
-- a concrete visual language ("liquid glass")
-- the first real OS-like landing experience
-- a clean baseline for upcoming windowing and runtime work
+- stronger Terminal-OS identity on first load
+- clearer immediate discoverability without opening launcher first
+- a clean path to future live previews for YOU.EXE and THIRD.EXE
 
 ## In plain English
 
-This step was like replacing a construction sign with an actual lobby.
+Before this change, users landed on mostly empty space and had to open the launcher to discover the project.
 
-Before this, NEOS showed a single placeholder card.
-After this, it behaves like a desktop shell with a taskbar and launcher flow.
+Now, users see the main surfaces right away as desktop panels, so the system feels alive the moment it appears.
 
 ## What the UI looked like
 
-At this stage, the app opens into a bright liquid-glass desktop surface with a glass taskbar and launcher entry point.
-No windows are open by default, which keeps the first screen calm and clear.
+At this stage, the app opens into a panel-based desktop with four preview cards above the taskbar.
+The launcher still exists, but it is no longer the front door.
 
 ![Stage 1A shell home](../assets/01-stage-1a/shell-home.png)
 
@@ -42,7 +41,7 @@ export function DesktopShell(): ReactElement {
   return (
     <main className="neosShell">
       <div className="wallpaper" aria-hidden="true" />
-      <section aria-label="Desktop surface" className="desktopSurface" />
+      <DesktopGrid panels={desktopPanels} onOpenPanel={...} />
       <Taskbar ... />
       {launcherOpen ? <LauncherOverlay apps={launcherApps} onClose={...} /> : null}
       {bootVisible ? <BootOverlay /> : null}
@@ -51,4 +50,4 @@ export function DesktopShell(): ReactElement {
 }
 ```
 
-This is the first true shell composition: wallpaper, desktop surface, taskbar, launcher overlay, and boot overlay.
+This composition keeps OS structure simple while exposing core project surfaces immediately on the desktop.

@@ -40,17 +40,16 @@
         <p class="kicker">Stage 1A</p>
         <h2>First Shell UI Pass</h2>
         <p>
-          This milestone replaced the bootstrap placeholder with the first real
-          NEOS shell.
+          This milestone moved NEOS from launcher-first landing to a desktop-first
+          landing model.
         </p>
         <p>
-          The desktop now has a liquid-glass wallpaper surface, a glass-style taskbar,
-          a launcher overlay, and a short static boot handoff before the shell
-          appears.
+          The desktop now shows immediate preview panels for ME.EXE, YOU.EXE,
+          THIRD.EXE, and HOME, with the launcher kept as a secondary path.
         </p>
         <p>
-          In plain English, this was the step from a construction sign to an
-          actual lobby: the system now looks and behaves like a desktop shell.
+          In plain English, this changed the first impression from empty space
+          to visible project surfaces right on arrival.
         </p>
         <img
           src="../assets/01-stage-1a/shell-home.png"
@@ -60,12 +59,12 @@
 
       <section class="code-card">
         <p class="kicker">Important code</p>
-        <h3>The first shell composition</h3>
+        <h3>Desktop-first shell composition</h3>
         <pre><code>export function DesktopShell(): ReactElement {
   return (
     &lt;main className="neosShell"&gt;
       &lt;div className="wallpaper" aria-hidden="true" /&gt;
-      &lt;section aria-label="Desktop surface" className="desktopSurface" /&gt;
+      &lt;DesktopGrid panels={desktopPanels} onOpenPanel={...} /&gt;
       &lt;Taskbar ... /&gt;
       {launcherOpen ? &lt;LauncherOverlay apps={launcherApps} onClose={...} /&gt; : null}
       {bootVisible ? &lt;BootOverlay /&gt; : null}
@@ -73,8 +72,8 @@
   );
 }</code></pre>
         <p>
-          This layout establishes the first usable shell surface while keeping
-          runtime scope intentionally narrow.
+          This keeps runtime scope narrow while exposing core project surfaces
+          directly on the desktop.
         </p>
       </section>
     </main>
