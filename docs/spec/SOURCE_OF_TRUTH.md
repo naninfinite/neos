@@ -114,3 +114,23 @@ Before Codex starts any task, it should confirm:
 5. implement launcher and app registration flow
 6. implement core apps
 7. implement validation / regression passes
+
+## Long-term product surfaces
+
+The following are important long-term parts of the NEOS product vision, even if they are not all implemented in the current phase:
+
+- Shell / desktop / launcher
+- Core system apps
+- YOU.EXE style social/message-board surface
+- THIRD.EXE style three.js / 3D / world-building surface
+- Experimental/creative apps
+- Portfolio/media surfaces
+
+The current shell pass does not need to expose all of these immediately.
+
+However, implementation decisions should avoid blocking them structurally, visually, or navigationally.
+
+The first visible shell may use a desktop, menu-based entry point, launcher-first model, or hybrid approach, as long as it preserves the OS illusion and leaves room for these future surfaces.
+
+Long-term note:
+NEOS is expected to grow beyond the initial shell into future surfaces including a message-board/social layer and a three.js / 3D world-building layer. These do not need to be implemented now, but the shell direction should leave room for them and should not assume the product ends at simple desktop windows only.
