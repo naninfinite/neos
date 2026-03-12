@@ -11,8 +11,8 @@
   --color-bg-base: #f0f0f5;
   --color-bg-surface: rgba(255, 255, 255, 0.55);
   --color-bg-elevated: rgba(255, 255, 255, 0.72);
-  --color-glass: rgba(255, 255, 255, 0.45);
-  --color-glass-border: rgba(255, 255, 255, 0.5);
+  --color-glass: rgba(255, 255, 255, 0.35);
+  --color-glass-border: rgba(255, 255, 255, 0.55);
   --color-accent-primary: #00c878;
   --color-accent-secondary: #3b82f6;
   --color-accent-danger: #ef4444;
@@ -21,6 +21,9 @@
   --color-border-subtle: rgba(0, 0, 0, 0.06);
   --color-border-strong: rgba(0, 0, 0, 0.12);
   --color-shadow: rgba(0, 0, 0, 0.08);
+  --glass-blur: 28px;
+  --glass-saturate: 1.8;
+  --glass-highlight: rgba(255, 255, 255, 0.4);
 
   --font-ui: 'Inter', 'Segoe UI', 'Helvetica Neue', sans-serif;
   --font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Consolas', monospace;
