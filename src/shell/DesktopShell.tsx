@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { ReactElement } from 'react';
 import { BootOverlay } from './BootOverlay';
+import { DesktopGrid } from './DesktopGrid';
+import { DESKTOP_PANEL_PREVIEWS } from './desktopPanels';
 import { LauncherOverlay } from './LauncherOverlay';
 import { MOCK_LAUNCHER_APPS } from './mockApps';
 import { Taskbar } from './Taskbar';
@@ -50,11 +52,18 @@ export function DesktopShell(): ReactElement {
   }, []);
 
   const launcherApps = useMemo(() => MOCK_LAUNCHER_APPS, []);
+  const desktopPanels = useMemo(() => DESKTOP_PANEL_PREVIEWS, []);
 
   return (
     <main className="neosShell">
       <div className="wallpaper" aria-hidden="true" />
-      <section aria-label="Desktop surface" className="desktopSurface" />
+      <DesktopGrid
+        panels={desktopPanels}
+        onOpenPanel={(_appId: string) => {
+          // Window launches are wired in the runtime milestone.
+          setLauncherOpen(true);
+        }}
+      />
 
       <Taskbar
         clockLabel={clockLabel}

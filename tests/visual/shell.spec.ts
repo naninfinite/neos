@@ -7,6 +7,9 @@ test('stage 1A shell UI renders', async ({ page }) => {
     await expect(page.getByLabel('Boot overlay')).toBeHidden({ timeout: 5000 });
 
     await expect(page.getByLabel('Desktop surface')).toBeVisible();
+    await expect(page.getByText('ME.EXE')).toBeVisible();
+    await expect(page.getByText('YOU.EXE')).toBeVisible();
+    await expect(page.getByText('THIRD.EXE')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Open launcher' })).toBeVisible();
     await expect(page.getByLabel('System clock')).toContainText(/\d{2}:\d{2}/);
 
