@@ -5,6 +5,7 @@ export interface DesktopPanelPreview {
   subtitle: string;
   summary: string;
   detail: string;
+  layout: 'hero' | 'standard';
 }
 
 export const DESKTOP_PANEL_PREVIEWS: DesktopPanelPreview[] = [
@@ -15,6 +16,7 @@ export const DESKTOP_PANEL_PREVIEWS: DesktopPanelPreview[] = [
     subtitle: 'Portfolio Surface',
     summary: 'Projects, notes, and profile context.',
     detail: 'Primary identity surface for the rebuild.',
+    layout: 'hero',
   },
   {
     id: 'panel-you',
@@ -23,6 +25,7 @@ export const DESKTOP_PANEL_PREVIEWS: DesktopPanelPreview[] = [
     subtitle: 'Message Board',
     summary: 'Community and direct response layer.',
     detail: 'Future message stream and interaction queue.',
+    layout: 'standard',
   },
   {
     id: 'panel-third',
@@ -31,13 +34,6 @@ export const DESKTOP_PANEL_PREVIEWS: DesktopPanelPreview[] = [
     subtitle: '3D Workspace',
     summary: 'Experimental spatial surface.',
     detail: 'Reserved slot for real-time scene previews.',
-  },
-  {
-    id: 'panel-home',
-    appId: 'home',
-    title: 'HOME',
-    subtitle: 'System Snapshot',
-    summary: 'NEOS desktop status and launch hints.',
-    detail: 'Runtime milestone: Stage 1A landing model.',
+    layout: 'standard',
   },
 ];

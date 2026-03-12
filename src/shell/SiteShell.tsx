@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import { BootOverlay } from './BootOverlay';
 import { ChannelBar } from './ChannelBar';
 import type { ChannelId } from './ChannelBar';
+import { ChannelSwitcher } from './ChannelSwitcher';
 import { HomeChannel } from './HomeChannel';
 import { MeChannel } from './MeChannel';
 
@@ -41,21 +42,56 @@ function ChannelView({
 export function SiteShell(): ReactElement {
   const [bootVisible, setBootVisible] = useState(true);
   const [activeChannel, setActiveChannel] = useState<ChannelId>('home');
+  const [switcherOpen, setSwitcherOpen] = useState(false);
 
   useEffect(() => {
     const bootTimer = window.setTimeout(() => setBootVisible(false), BOOT_TIMEOUT_MS);
     return () => window.clearTimeout(bootTimer);
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        setSwitcherOpen(true);
+        return;
+      }
+
+      if (event.key === 'Escape') {
+        setSwitcherOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const navigateTo = (channel: ChannelId) => {
+    setActiveChannel(channel);
+    setSwitcherOpen(false);
+  };
+
   return (
     <main className="neosShell">
       <div className="wallpaper" aria-hidden="true" />
 
-      <ChannelBar activeChannel={activeChannel} onNavigate={setActiveChannel} />
+      <ChannelBar
+        activeChannel={activeChannel}
+        onNavigate={navigateTo}
+        onOpenSwitcher={() => setSwitcherOpen(true)}
+      />
 
       <div className="channelViewport">
-        <ChannelView channel={activeChannel} onNavigate={setActiveChannel} />
+        <ChannelView channel={activeChannel} onNavigate={navigateTo} />
       </div>
+
+      {switcherOpen ? (
+        <ChannelSwitcher
+          activeChannel={activeChannel}
+          onClose={() => setSwitcherOpen(false)}
+          onNavigate={navigateTo}
+        />
+      ) : null}
 
       {bootVisible ? <BootOverlay /> : null}
     </main>

@@ -9,20 +9,32 @@ test('site shell renders with channel navigation', async ({ page }) => {
     // Channel bar is visible with navigation
     await expect(page.getByLabel('Site navigation')).toBeVisible();
     await expect(page.getByRole('button', { name: 'NEOS' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Switch Channels' })).toBeVisible();
+    await expect(page.getByLabel('Channel switcher')).toHaveCount(0);
 
     // Home channel shows panels
     await expect(page.getByLabel('Home')).toBeVisible();
-    await expect(page.getByText('ME.EXE')).toBeVisible();
-    await expect(page.getByText('YOU.EXE')).toBeVisible();
-    await expect(page.getByText('THIRD.EXE')).toBeVisible();
+    await expect(page.getByLabel('ME.EXE preview')).toBeVisible();
+    await expect(page.getByLabel('YOU.EXE preview')).toBeVisible();
+    await expect(page.getByLabel('THIRD.EXE preview')).toBeVisible();
 
-    // Navigate to ME channel — taskbar only appears here
-    await page.getByRole('button', { name: 'ME', exact: true }).click();
+    // Navigate to ME channel from home surface — taskbar appears here only
+    await page
+      .getByLabel('ME.EXE preview')
+      .getByRole('button', { name: 'Open ME.EXE' })
+      .click();
     await expect(page.getByLabel('ME.EXE')).toBeVisible();
     await expect(page.getByLabel('Taskbar')).toBeVisible();
     await expect(page.getByLabel('System clock')).toContainText(/\d{2}:\d{2}/);
 
-    // Navigate back to home — no taskbar
+    // Quick switch is secondary navigation and can route to YOU
+    await page.getByRole('button', { name: 'Switch Channels' }).click();
+    await expect(page.getByLabel('Channel switcher')).toBeVisible();
+    await page.getByRole('button', { name: /YOU\.EXE/i }).click();
+    await expect(page.getByLabel('YOU.EXE')).toBeVisible();
+    await expect(page.getByLabel('Taskbar')).toBeHidden();
+
+    // Navigate back to home
     await page.getByRole('button', { name: 'NEOS' }).click();
     await expect(page.getByLabel('Home')).toBeVisible();
     await expect(page.getByLabel('Taskbar')).toBeHidden();

@@ -11,7 +11,12 @@ export function DesktopPanel({
   onOpenPanel,
 }: DesktopPanelProps): ReactElement {
   return (
-    <article className="desktopPanel">
+    <article
+      aria-label={`${panel.title} preview`}
+      className={`desktopPanel desktopPanel--${panel.appId} ${
+        panel.layout === 'hero' ? 'desktopPanel--hero' : 'desktopPanel--standard'
+      }`}
+    >
       <header className="desktopPanelTitlebar">
         <p className="desktopPanelApp">{panel.title}</p>
         <button
@@ -19,7 +24,7 @@ export function DesktopPanel({
           type="button"
           onClick={() => onOpenPanel(panel.appId)}
         >
-          Open
+          Open {panel.title}
         </button>
       </header>
 
