@@ -40,16 +40,16 @@
         <p class="kicker">Stage 1A</p>
         <h2>First Shell UI Pass</h2>
         <p>
-          This milestone moved NEOS from launcher-first landing to a desktop-first
-          landing model.
+          This milestone finalized the navigation boundary model between the
+          site shell and the ME.EXE OS environment.
         </p>
         <p>
-          The desktop now shows immediate preview panels for ME.EXE, YOU.EXE,
-          THIRD.EXE, and HOME, with the launcher kept as a secondary path.
+          The top-level site now uses a global channel bar and HOME hub panels,
+          while the taskbar and launcher exist only inside ME.EXE.
         </p>
         <p>
-          In plain English, this changed the first impression from empty space
-          to visible project surfaces right on arrival.
+          In plain English, this made the hierarchy clear: the site is
+          multi-channel, and the OS simulation is contained where it belongs.
         </p>
         <img
           src="../assets/01-stage-1a/shell-home.png"
@@ -59,21 +59,23 @@
 
       <section class="code-card">
         <p class="kicker">Important code</p>
-        <h3>Desktop-first shell composition</h3>
-        <pre><code>export function DesktopShell(): ReactElement {
+        <h3>Scoped Shell Composition</h3>
+        <pre><code>export function SiteShell(): ReactElement {
   return (
     &lt;main className="neosShell"&gt;
       &lt;div className="wallpaper" aria-hidden="true" /&gt;
-      &lt;DesktopGrid panels={desktopPanels} onOpenPanel={...} /&gt;
-      &lt;Taskbar ... /&gt;
-      {launcherOpen ? &lt;LauncherOverlay apps={launcherApps} onClose={...} /&gt; : null}
+      &lt;ChannelBar activeChannel={activeChannel} onNavigate={setActiveChannel} /&gt;
+      &lt;div className="channelViewport"&gt;
+        &lt;ChannelView channel={activeChannel} onNavigate={setActiveChannel} /&gt;
+      &lt;/div&gt;
       {bootVisible ? &lt;BootOverlay /&gt; : null}
     &lt;/main&gt;
   );
 }</code></pre>
         <p>
-          This keeps runtime scope narrow while exposing core project surfaces
-          directly on the desktop.
+          This separates global channel navigation from local in-channel
+          navigation, so ME.EXE can own the taskbar without imposing it
+          everywhere.
         </p>
       </section>
     </main>

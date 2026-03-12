@@ -17,10 +17,11 @@ It is written to make the project understandable to both technical and non-techn
 
 ## Current status
 
-Stage 1A is implemented as a desktop-first shell UI pass.
+Stage 1A is implemented as a channel-based shell with scoped OS boundaries.
 
-The project has moved from placeholder text and launcher-first discovery to a
-panel-based desktop landing with visible core surfaces.
+The project has moved from a global OS shell toward a clearer model:
+site-level channel navigation on top, with ME.EXE as the contained OS
+environment and taskbar owner.
 
 ## How to read this
 
@@ -39,4 +40,4 @@ Milestones will be added here as the project develops.
 
 ### Completed milestone highlights
 
-- Stage 1A — first shell UI pass (desktop preview panels, heavy liquid-glass styling, taskbar + launcher backup, boot placeholder)
+- Stage 1A — first shell UI pass (channel bar + home panels + ME-local taskbar, heavy liquid-glass styling, boot placeholder)

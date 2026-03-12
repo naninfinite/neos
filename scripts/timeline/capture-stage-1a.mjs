@@ -139,7 +139,8 @@ try {
     state: 'hidden',
     timeout: 6_000,
   });
-  await page.waitForSelector('[aria-label="Taskbar"]', { timeout: 2_000 });
+  await page.waitForSelector('[aria-label="Site navigation"]', { timeout: 2_000 });
+  await page.waitForSelector('[aria-label="Home"]', { timeout: 2_000 });
   await page.waitForSelector('text=ME.EXE', { timeout: 2_000 });
   await page.screenshot({ path: outputPath, fullPage: true });
 } finally {
