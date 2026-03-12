@@ -106,6 +106,41 @@ Closing a window must remove its id from `mobileHistory`.
 ### D-19 - Boot / VFS timing
 Boot does not block on VFS readiness. `vfs.prefetch()` starts during bootstrap, and VFS-dependent apps handle their own loading states.
 
+## Home/Desktop vs Channel Runtime Boundary
+
+- The NEOS / Terminal-OS v2 home desktop is a **lightweight preview surface**, not a live application runtime.
+- Desktop channel panels (for example ME.EXE, YOU.EXE, THIRD.EXE) must not expose full channel interaction directly from the desktop surface.
+- Users may **enter** a channel from the desktop, but the desktop itself must not host active channel systems.
+- Heavy runtimes must only mount after **explicit channel entry**.
+
+### Runtime constraints
+- WebGL / three.js scenes must **not** boot on the desktop.
+- Desktop panels may use static artwork, lightweight CSS motion, thumbnails, poster frames, or other non-runtime preview states.
+- Audio contexts, simulation loops, render loops, physics, multiplayer presence, and other heavy channel systems must remain inactive until the user enters that channel.
+- On channel exit, heavy runtimes should pause, unmount, or dispose according to that channel’s lifecycle policy.
+
+### Product intent
+- Home/Desktop = orientation, identity, preview, routing.
+- Channel = live runtime.
+- This boundary exists for clarity, performance, thermal safety on mobile, and predictable scaling as richer channel runtimes are added.
+
+## Channel Mounting Policy
+
+NEOS / Terminal-OS v2 uses a two-layer model:
+
+1. **Desktop layer**
+   - Lightweight shell only.
+   - Renders panel summaries and navigation affordances.
+   - Must not initialise heavy channel engines.
+
+2. **Channel runtime layer**
+   - Activated only after explicit user entry into a channel.
+   - Responsible for mounting the full runtime for that channel.
+   - Owns boot, pause, resume, unmount, and disposal behaviour.
+
+### Technical rule
+Desktop cards must never implicitly mount live WebGL / three.js scenes or equivalent heavy subsystems. Any preview shown on the desktop must be non-interactive or near-static unless explicitly defined as lightweight and safe.
+
 ## Implementation note
 
 Before starting any milestone, Codex should confirm that the code it is about to write is consistent with this file and `03-type-contracts.md`.

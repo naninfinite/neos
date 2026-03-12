@@ -1,54 +1,57 @@
-# Stage 1A - First Shell UI Pass
+# Stage 1A — Shell Scaffold
 
 ## What we were trying to do
 
-Strengthen the first impression of HOME so arrival feels intentional and spatial, while keeping channel switching secondary and keeping ME.EXE as the only taskbar owner.
+Turn the fresh repo from a generic Vite starter into the first recognisable version of NEOS.
 
 ## What changed
 
-- Upgraded HOME into a stronger landing composition with a clear intro block and larger channel surfaces
-- Made ME.EXE the hero surface on HOME, with substantial YOU.EXE and THIRD.EXE panels
-- Replaced always-visible tab-style channel switching with a secondary quick-switch dialog
-- Kept ME taskbar and launcher local to ME.EXE only
-- Preserved and extended heavy Liquid Glass styling across all shell layers
+- Created the new rebuild repository
+- Added the spec-first documentation set
+- Added root guidance files such as `README.md` and `AGENTS.md`
+- Replaced the default Vite demo with a minimal NEOS placeholder shell
+- Added the first source folder structure for the future runtime
 
 ## Why this matters
 
-This improved first impression and hierarchy together:
-- HOME now reads as a destination, not a sparse menu
-- Channel switching is available but clearly secondary
-- ME.EXE remains the contained OS channel
-- Other channels stay free for future custom UX
+This is the point where the project stopped being a starter template and became a real product foundation.
+
+It established:
+- the new implementation target
+- the document authority order
+- the first visible shell identity
+- the initial place where the runtime will grow
 
 ## In plain English
 
-Before this change, HOME was clearer than before but still felt closer to a utility panel grid.
+This step was like taking over an empty building and putting up the first walls, sign, and floor plan.
 
-Now, HOME feels like a proper arrival surface with visual weight, and channel switching feels like a deliberate action instead of the main layout pattern.
+Before this, the project was just a starter kit.
+
+After this, it became the beginning of a real system with a name, structure, and direction.
 
 ## What the UI looked like
 
-After boot, users land on HOME with a strong hero-led composition.
-The taskbar appears only after entering ME.EXE, and quick-switch opens as a secondary overlay.
+At this stage, the app shows a simple shell bootstrap screen instead of the default Vite counter demo.
 
-![Stage 1A shell home](../assets/01-stage-1a/shell-home.png)
+This is intentional.
+
+The goal was not to build the operating system yet, but to replace the starter placeholder with one that belongs to the project.
 
 ## Important code
 
 ```tsx
-export function SiteShell(): ReactElement {
+export default function App() {
   return (
-    <main className="neosShell">
-      <div className="wallpaper" aria-hidden="true" />
-      <ChannelBar ... onOpenSwitcher={() => setSwitcherOpen(true)} />
-      <div className="channelViewport">
-        <ChannelView channel={activeChannel} onNavigate={setActiveChannel} />
-      </div>
-      {switcherOpen ? <ChannelSwitcher ... /> : null}
-      {bootVisible ? <BootOverlay /> : null}
+    <main className="app-shell">
+      <section className="boot-panel">
+        <p className="boot-label">NEOS</p>
+        <h1 className="boot-title">Shell bootstrap</h1>
+        <p className="boot-copy">
+          Runtime scaffold initialised. Windowing, services, and apps will be
+          mounted here.
+        </p>
+      </section>
     </main>
   );
 }
-```
-
-This composition keeps HOME strong, ME scoped, and channel switching secondary.

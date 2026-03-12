@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { ReactElement } from 'react';
+import { ConnectChannel } from '../apps/connect-exe/ConnectChannel';
 import { BootOverlay } from './BootOverlay';
 import { ChannelBar } from './ChannelBar';
 import type { ChannelId } from './ChannelBar';
@@ -33,6 +34,8 @@ function ChannelView({
           <p className="channelPlaceholderDetail">3D workspace — coming soon.</p>
         </section>
       );
+    case 'connect':
+      return <ConnectChannel />;
     case 'home':
     default:
       return <HomeChannel onNavigate={onNavigate} />;

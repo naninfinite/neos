@@ -301,15 +301,27 @@ input {
   color: var(--color-text-secondary);
 }
 
-.homeGrid {
+.homeHeroSection {
   width: 100%;
   max-width: 1160px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-  grid-template-areas:
-    'me you'
-    'me third';
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-4);
+}
+
+.homeDock {
+  width: 100%;
+  max-width: 1160px;
+  display: flex;
   gap: var(--space-4);
+  padding: var(--space-4) 0;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Hide scrollbar for cleaner look */
+}
+
+.homeDock::-webkit-scrollbar {
+  display: none;
 }
 
 /* ── Desktop panels (shared) ───────────────────────────── */
@@ -325,29 +337,26 @@ input {
     0 18px 36px rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(36px) saturate(1.45) brightness(1.03);
   overflow: hidden;
-  cursor: pointer;
   transition:
     box-shadow 150ms ease,
     transform 150ms ease;
 }
 
 .desktopPanel--hero {
+  flex: 1;
+  max-width: 860px;
   min-height: 470px;
+  cursor: default;
 }
 
-.desktopPanel--me {
-  grid-area: me;
+.desktopPanel--dock {
+  width: 280px;
+  min-height: 200px;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
-.desktopPanel--you {
-  grid-area: you;
-}
-
-.desktopPanel--third {
-  grid-area: third;
-}
-
-.desktopPanel:hover {
+.desktopPanel--dock:hover {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.5),
     inset 0 -1px 0 rgba(0, 0, 0, 0.02),
@@ -817,9 +826,12 @@ input {
     font-size: clamp(1.4rem, 7.6vw, 2rem);
   }
 
-  .homeGrid {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: none;
+  .homeHeroSection {
+    margin-top: var(--space-2);
+  }
+
+  .homeDock {
+    padding: var(--space-2) 0;
   }
 
   .desktopPanel {
@@ -827,7 +839,12 @@ input {
   }
 
   .desktopPanel--hero {
-    min-height: 220px;
+    min-height: 320px;
+  }
+
+  .desktopPanel--dock {
+    width: 240px;
+    min-height: 160px;
   }
 
   .taskbar {

@@ -36,4 +36,13 @@ export const DESKTOP_PANEL_PREVIEWS: DesktopPanelPreview[] = [
     detail: 'Reserved slot for real-time scene previews.',
     layout: 'standard',
   },
+  {
+    id: 'panel-connect',
+    appId: 'connect',
+    title: 'CONNECT.EXE',
+    subtitle: 'Co-op Runtime',
+    summary: 'Sun Maze greybox runtime foundation.',
+    detail: 'M0 includes room phases, placeholders, and timer scaffolding.',
+    layout: 'standard',
+  },
 ];

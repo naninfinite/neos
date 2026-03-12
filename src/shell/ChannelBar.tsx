@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-export type ChannelId = 'home' | 'me' | 'you' | 'third';
+export type ChannelId = 'home' | 'me' | 'you' | 'third' | 'connect';
 
 interface ChannelBarProps {
   activeChannel: ChannelId;
@@ -13,6 +13,7 @@ const CHANNEL_LABELS: Record<ChannelId, string> = {
   me: 'ME.EXE',
   you: 'YOU.EXE',
   third: 'THIRD.EXE',
+  connect: 'CONNECT.EXE',
 };
 
 export function ChannelBar({

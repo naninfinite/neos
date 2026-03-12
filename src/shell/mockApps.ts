@@ -12,4 +12,5 @@ export const MOCK_LAUNCHER_APPS: LauncherApp[] = [
   { id: 'me', name: 'ME.EXE', category: 'Personal', icon: 'ME' },
   { id: 'you', name: 'YOU.EXE', category: 'Personal', icon: 'YO' },
   { id: 'third', name: 'THIRD.EXE', category: 'Creative', icon: '3D' },
+  { id: 'connect', name: 'CONNECT.EXE', category: 'Games', icon: 'CN' },
 ];

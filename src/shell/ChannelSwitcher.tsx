@@ -12,6 +12,7 @@ const CHANNELS: Array<{ id: ChannelId; name: string; detail: string }> = [
   { id: 'me', name: 'ME.EXE', detail: 'Contained OS environment' },
   { id: 'you', name: 'YOU.EXE', detail: 'Message board surface' },
   { id: 'third', name: 'THIRD.EXE', detail: '3D workspace surface' },
+  { id: 'connect', name: 'CONNECT.EXE', detail: 'Sun Maze runtime foundation' },
 ];
 
 export function ChannelSwitcher({
