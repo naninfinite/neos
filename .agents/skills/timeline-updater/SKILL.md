@@ -42,6 +42,28 @@ Before updating the timeline, gather:
 - which screenshot(s) best show the change
 - one short code snippet only if it helps explain the step
 
+## Editorial judgement rule
+
+For each milestone, decide whether the change would be easier to understand with:
+
+- screenshots only
+- screenshots plus one short code snippet
+- screenshots plus two short code snippets if one does not explain the change clearly enough
+
+Use code snippets when:
+
+- the implementation introduced an important new structure
+- the visible change depends on a small but meaningful piece of code
+- the code helps explain how the product evolved
+
+Avoid including code if the milestone can be explained clearly without it.
+
+When code is included:
+
+- prefer short excerpts rather than large blocks
+- copy real code from the repository
+- include only the lines necessary to explain the change
+
 ## Required writing style
 
 Write for a non-technical reader.
@@ -100,6 +122,25 @@ If the visual change is meaningful:
 - ensure the milestone references the correct screenshot assets
 - ensure timeline HTML is updated if needed
 - ensure PDF export is refreshed if requested or part of the workflow
+- refresh the exported PDF after timeline content or screenshots change
+
+## Screenshot judgement rule
+
+Screenshots should not be captured mechanically.
+
+For each milestone, select the minimum number of screenshots that clearly explain the visible change.
+
+Typical capture set:
+
+- one hero screenshot showing the primary UI state
+- one supporting screenshot if interaction or layout change needs clarification
+- optionally one overlay/mobile/alternate state if it adds meaningful context
+
+Avoid redundant captures or near-identical images.
+
+Screenshot assets should live under:
+
+docs/timeline/assets/<milestone>/
 
 ## Scope discipline
 

@@ -2,6 +2,7 @@
 
 ## Project mode
 
+The timeline is a public-facing development narrative and must remain readable by non-technical audiences.
 Fresh rebuild. Do not refactor legacy code in place.
 
 ## Edit boundary
@@ -78,10 +79,27 @@ For any task involving visible UI changes, screenshots, visual regression, timel
 
 If Playwright is not installed or not runnable on the current device, agents must explicitly inform the user and stop the visual/timeline portion of the task. They must not silently skip screenshots or PDF export.
 
+Visual documentation workflow:
+
+1. `playwright-timeline-guard`
+2. `ui-milestone-capture`
+3. `timeline-updater`
+
+Do not update timeline or export PDFs without first confirming Playwright preflight has passed.
+
 ## Timeline documentation
 
-For any meaningful visible milestone, agents should use `timeline-updater` to keep the timeline readable for non-technical readers.
+For any meaningful visible milestone, agents must document the change using `timeline-updater`.
 
-For screenshot and visual asset refresh work, agents should use `ui-milestone-capture` after Playwright preflight passes.
+If the milestone affects the UI, the following workflow must be used:
+
+1. `playwright-timeline-guard`
+2. `ui-milestone-capture`
+3. `timeline-updater`
+
+Timeline entries should include screenshots when they materially improve understanding of the milestone.
+
+If code helps explain the milestone, agents may include one or two short excerpts with plain-English explanation.
 
 Any task that requests screenshots, preview capture, or timeline/PDF refresh is considered incomplete unless Playwright preflight passes or the user is explicitly informed that Playwright is unavailable.
+
