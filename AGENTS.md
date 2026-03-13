@@ -71,3 +71,17 @@ For small contained fixes:
 2. `task-scope-lock`
 3. `implementation-diff-writer`
 4. `validation-auditor`
+
+## Playwright / timeline guard
+
+For any task involving visible UI changes, screenshots, visual regression, timeline updates, or PDF export, agents must use `playwright-timeline-guard` before continuing.
+
+If Playwright is not installed or not runnable on the current device, agents must explicitly inform the user and stop the visual/timeline portion of the task. They must not silently skip screenshots or PDF export.
+
+## Timeline documentation
+
+For any meaningful visible milestone, agents should use `timeline-updater` to keep the timeline readable for non-technical readers.
+
+For screenshot and visual asset refresh work, agents should use `ui-milestone-capture` after Playwright preflight passes.
+
+Any task that requests screenshots, preview capture, or timeline/PDF refresh is considered incomplete unless Playwright preflight passes or the user is explicitly informed that Playwright is unavailable.
