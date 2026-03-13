@@ -27,9 +27,9 @@ This title is not permanent. The project may later be renamed to better fit a br
 
 ## AgentChatTR roles
 
-- **Claude** = architecture and spec guard
-- **Codex** = implementation writer
-- **Gemini** = validation and consistency checker
+- **Claude** = Architecture and spec guard responsible for enforcing system architecture and protecting the integrity of the specification.
+- **Codex** = Implementation engineer responsible for writing code and  implementing features defined by project specifications.
+- **Gemini** = Validation and coordination agent responsible for reviewing outputs and confirming consistency between implementation and specification.
 
 ## Authority order
 
