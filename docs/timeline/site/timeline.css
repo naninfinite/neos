@@ -9,6 +9,7 @@
   --text: rgba(255, 255, 255, 0.92);
   --muted: rgba(255, 255, 255, 0.68);
   --accent: #72f5c8;
+  --line: rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -57,6 +58,7 @@ h2,
 h3 {
   margin-top: 0;
   line-height: 1.1;
+  color: var(--text);
 }
 
 p,
@@ -71,10 +73,22 @@ small,
 
 img {
   display: block;
-  width: 100%;
+  width: min(760px, 100%);
   border-radius: 16px;
   border: 1px solid var(--panel-border);
   margin-top: 16px;
+  margin-inline: auto;
+}
+
+figure {
+  margin: 18px 0 0;
+}
+
+figcaption {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 pre {
@@ -88,9 +102,29 @@ pre {
   white-space: pre-wrap;
 }
 
+code {
+  color: var(--text);
+}
+
 ul {
   margin: 0;
   padding-left: 20px;
+}
+
+ol {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.section h3 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.stage-map {
+  border-top: 1px solid var(--line);
+  margin-top: 16px;
+  padding-top: 14px;
 }
 
 @page {
@@ -99,10 +133,15 @@ ul {
 }
 
 @media print {
+  :root {
+    color-scheme: light;
+  }
+
   body {
     padding: 0;
     background: white;
-    color: black;
+    color: #111827;
+    line-height: 1.45;
   }
 
   .hero,
@@ -110,9 +149,20 @@ ul {
   .milestone,
   .code-card {
     background: white;
-    color: black;
+    color: #111827;
     border: 1px solid #d6dbe1;
     break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  li,
+  pre,
+  code,
+  figcaption {
+    color: #111827;
   }
 
   .kicker,
@@ -120,9 +170,25 @@ ul {
     color: #4d6475;
   }
 
+  img {
+    width: 70%;
+    max-width: 120mm;
+    border-color: #d6dbe1;
+  }
+
+  figcaption {
+    color: #445465;
+    font-size: 0.82rem;
+  }
+
   pre {
     background: #f5f7f9;
-    color: black;
+    color: #111827;
     border: 1px solid #d6dbe1;
+    font-size: 0.86rem;
+  }
+
+  .stage-map {
+    border-top-color: #d6dbe1;
   }
 }

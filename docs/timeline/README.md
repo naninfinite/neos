@@ -52,6 +52,15 @@ Update the timeline when:
 - a subsystem becomes functional
 - a major design decision materially changes the product
 
+## Historical integrity rule
+
+Timeline assets are append-only.
+
+- Never overwrite or delete existing screenshots in `assets/`
+- Add new screenshots with new names for new UI states
+- If a milestone is superseded, create a new milestone entry instead of rewriting the old one
+- Keep earlier milestone images visible so progression remains readable
+
 ## Milestone format
 
 Each milestone file should include:

@@ -10,56 +10,76 @@
     <main class="page">
       <section class="hero">
         <p class="kicker">NEOS Timeline</p>
-        <h1>From starter template to operating system rebuild</h1>
+        <h1>From starter template to structured OS shell</h1>
         <p>
-          This document is a readable project chronicle designed for both
-          technical and non-technical readers. It explains what changed, why it
-          changed, and what the project looked like as it evolved.
+          This PDF is the public-facing process log for the NEOS rebuild. It is
+          written to be readable by both technical and non-technical reviewers.
+          Each milestone explains what changed, why it changed, and what the UI
+          looked like at that step.
         </p>
         <p class="muted">
-          Current coverage: Stage 1A first shell UI pass.
+          Current coverage: Stage 1A (original shell UI) → SHELL-01A v2 (desktop shell rewrite).
         </p>
       </section>
 
       <section class="section">
-        <h2>How to read this</h2>
+        <h2>Project Snapshot</h2>
+        <p>
+          The team reset implementation discipline before the v2 rewrite. Work
+          is sequenced by lane and controlled by spec authority order.
+        </p>
         <ul>
-          <li>Each milestone describes a meaningful project step.</li>
-          <li>Every section explains the work in plain English.</li>
+          <li>Active implementation lanes: SHELL-DESKTOP, WINDOWING-OSAPI.</li>
           <li>
-            Small code samples are included only when they help explain what
-            changed.
+            HOME-INTEGRATION is allowed only when it directly supports shell
+            rules.
           </li>
-          <li>
-            Images show what the interface looked like at that point in time.
-          </li>
+          <li>CONNECT-SPEC is discussion-only.</li>
+          <li>CONNECT-IMPLEMENTATION is currently frozen.</li>
         </ul>
+        <div class="stage-map">
+          <h3>Timeline Map</h3>
+          <ol>
+            <li>Stage 0: Foundations</li>
+            <li>Stage 1A: First shell UI pass (original HOME channel navigation)</li>
+            <li>SHELL-01A v2: Desktop shell frame rewrite (current)</li>
+            <li>Stage 1B: Runtime bootstrap and core services</li>
+            <li>Stage 2: Window manager behavior</li>
+            <li>Stage 3+: App runtime and core apps</li>
+          </ol>
+        </div>
       </section>
 
       <article class="milestone">
-        <p class="kicker">Stage 1A</p>
+        <p class="kicker">Stage 1A — Original</p>
         <h2>First Shell UI Pass</h2>
         <p>
           This milestone strengthened the HOME landing composition while
           preserving the scoped ME.EXE OS boundary.
         </p>
         <p>
-          HOME now presents a hero-led channel surface layout, and channel
-          switching moved to a secondary quick-switch overlay. ME.EXE still
-          owns taskbar and launcher locally.
+          HOME presented a hero-led channel surface layout, and channel
+          switching moved to a secondary quick-switch overlay. ME.EXE owned
+          taskbar and launcher locally.
         </p>
         <p>
-          In plain English, landing now feels deliberate and substantial without
+          In plain English: landing felt deliberate and substantial without
           collapsing into a tile-browser or smart-TV style menu.
         </p>
-        <img
-          src="../assets/01-stage-1a/shell-home.png"
-          alt="Stage 1A first shell UI screen"
-        />
+        <figure>
+          <img
+            src="../assets/01-stage-1a/shell-home.png"
+            alt="Stage 1A first shell UI — HOME channel selector with ME, YOU, THIRD panels"
+          />
+          <figcaption>
+            Stage 1A: HOME channel navigation surface with hero composition and
+            secondary channel switcher. ME.EXE owned the taskbar in its own channel.
+          </figcaption>
+        </figure>
       </article>
 
       <section class="code-card">
-        <p class="kicker">Important code</p>
+        <p class="kicker">Important code — Stage 1A</p>
         <h3>HOME Composition + Secondary Switcher</h3>
         <pre><code>export function SiteShell(): ReactElement {
   return (
@@ -75,9 +95,105 @@
   );
 }</code></pre>
         <p>
-          This keeps channel switching available but secondary, while preserving
+          This kept channel switching available but secondary, while preserving
           ME.EXE as the contained OS environment.
         </p>
+      </section>
+
+      <article class="milestone">
+        <p class="kicker">SHELL-01A — v2 Rewrite</p>
+        <h2>Desktop Shell Frame + Boot Gate + Static Taskbar</h2>
+        <p>
+          After the v2 workflow reset, the project moved to a contract-first
+          desktop OS rewrite. SHELL-01A is the first milestone of the new
+          architecture: a proper desktop shell frame with correct layer ordering,
+          a boot gate, and a static taskbar.
+        </p>
+        <p>
+          This is a deliberate reset — not a visual upgrade of Stage 1A, but a
+          structural rewrite with a new architecture. The channel navigation from
+          Stage 1A is preserved in the timeline as history.
+        </p>
+        <h3>What this established</h3>
+        <ul>
+          <li>A stable desktop root in <code>Desktop.tsx</code> with spec-correct layer order.</li>
+          <li>A contract-shaped desktop store implementing the full <code>DesktopStore</code> interface.</li>
+          <li>A dedicated <code>WindowLayer</code> mount surface with no runtime logic.</li>
+          <li>A non-blocking boot gate that does not wait on VFS readiness.</li>
+          <li><code>Z_LAYER</code> and <code>SHELL_Z_INDEX</code> constants locked in code.</li>
+        </ul>
+        <figure>
+          <img
+            src="../assets/02-shell-01a/shell-01a-boot.png"
+            alt="SHELL-01A boot sequence overlay — terminal-style gate before desktop renders"
+          />
+          <figcaption>
+            Boot sequence: a fullscreen terminal-style overlay that dismisses on
+            click or keypress. Fires immediately on load without blocking VFS or
+            app services.
+          </figcaption>
+        </figure>
+        <figure>
+          <img
+            src="../assets/02-shell-01a/shell-01a-desktop.png"
+            alt="SHELL-01A desktop after boot — wallpaper, preview surface label, static taskbar"
+          />
+          <figcaption>
+            Desktop shell after boot is dismissed: gradient wallpaper, a
+            "Desktop Preview Surface" label marking the future icon layer, and a
+            static taskbar with Launcher, Task Area, and Tray placeholder zones.
+          </figcaption>
+        </figure>
+      </article>
+
+      <section class="code-card">
+        <p class="kicker">Important code — SHELL-01A</p>
+        <h3>Desktop Layer Stack</h3>
+        <pre><code>export function Desktop(): JSX.Element {
+  const bootComplete = useDesktopStore((store) =&gt; store.bootComplete);
+
+  return (
+    &lt;main aria-label="Desktop shell" style={desktopStyle}&gt;
+      &lt;Wallpaper /&gt;
+      &lt;div aria-hidden="true" style={previewSurfaceStyle}&gt;
+        &lt;span style={previewBadgeStyle}&gt;Desktop Preview Surface&lt;/span&gt;
+      &lt;/div&gt;
+      &lt;WindowLayer /&gt;
+      &lt;Taskbar /&gt;
+      {!bootComplete ? &lt;BootSequence /&gt; : null}
+    &lt;/main&gt;
+  );
+}</code></pre>
+        <p>
+          This stack defines the layer order in code: wallpaper at the base,
+          preview surface, window mount point, taskbar above, and boot overlay
+          on top. Every z-index is driven by named constants, not magic numbers.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2>What Was Intentionally Deferred in SHELL-01A</h2>
+        <ul>
+          <li>No launcher behavior in this milestone.</li>
+          <li>No notification or context-menu systems yet.</li>
+          <li>No desktop icon interactions yet.</li>
+          <li>No live app windows inside <code>WindowLayer</code> yet.</li>
+          <li>No CONNECT gameplay or runtime implementation.</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>Next Milestone Focus</h2>
+        <p>
+          Stage 1B should wire runtime bootstrap and core services without
+          breaking the shell boundaries established in SHELL-01A.
+        </p>
+        <ul>
+          <li>Add service scaffolding and typed contracts.</li>
+          <li>Keep boot non-blocking for VFS readiness.</li>
+          <li>Begin window manager integration through the placeholder <code>WindowLayer</code>.</li>
+          <li>Maintain the desktop as a lightweight preview surface.</li>
+        </ul>
       </section>
     </main>
   </body>

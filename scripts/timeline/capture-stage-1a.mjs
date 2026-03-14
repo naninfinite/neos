@@ -1,5 +1,6 @@
 import { chromium } from '@playwright/test';
 import { spawn } from 'node:child_process';
+import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -19,6 +20,18 @@ const outputPath = path.join(
 );
 
 const PREVIEW_TIMEOUT_MS = 30_000;
+
+function resolveHistoricalSafeOutputPath(filePath) {
+  if (!fs.existsSync(filePath)) {
+    return filePath;
+  }
+
+  const directory = path.dirname(filePath);
+  const ext = path.extname(filePath);
+  const base = path.basename(filePath, ext);
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  return path.join(directory, `${base}-${stamp}${ext}`);
+}
 
 function createPreviewServer() {
   const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
@@ -125,6 +138,7 @@ async function stopPreview(preview) {
 
 const serverAlreadyRunning = await isServerReachable(previewUrl);
 let preview = null;
+const finalOutputPath = resolveHistoricalSafeOutputPath(outputPath);
 
 if (!serverAlreadyRunning) {
   preview = createPreviewServer();
@@ -135,14 +149,14 @@ const browser = await chromium.launch();
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 960 } });
   await page.goto(previewUrl, { waitUntil: 'load' });
-  await page.waitForSelector('[aria-label="Boot overlay"]', {
+  await page.waitForSelector('text=Terminal-OS v2 shell initializing...', {
     state: 'hidden',
     timeout: 6_000,
   });
-  await page.waitForSelector('[aria-label="Site navigation"]', { timeout: 2_000 });
-  await page.waitForSelector('[aria-label="Home"]', { timeout: 2_000 });
-  await page.waitForSelector('text=ME.EXE', { timeout: 2_000 });
-  await page.screenshot({ path: outputPath, fullPage: true });
+  await page.waitForSelector('[aria-label="Desktop shell"]', { timeout: 2_000 });
+  await page.waitForSelector('text=Desktop Preview Surface', { timeout: 2_000 });
+  await page.waitForSelector('text=Task Area Placeholder', { timeout: 2_000 });
+  await page.screenshot({ path: finalOutputPath, fullPage: true });
 } finally {
   await browser.close();
   if (preview) {
@@ -150,4 +164,14 @@ try {
   }
 }
 
-console.log(`Saved screenshot to ${outputPath}`);
+if (finalOutputPath !== outputPath) {
+  console.log(
+    [
+      `Base asset already exists at ${outputPath}.`,
+      'To preserve timeline history, capture was saved under a new filename:',
+      finalOutputPath,
+    ].join('\n')
+  );
+} else {
+  console.log(`Saved screenshot to ${finalOutputPath}`);
+}
