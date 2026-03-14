@@ -47,18 +47,35 @@ Do not capture excessive redundant screenshots.
 
 ## Asset location rules
 
+Each milestone gets its own folder. NEVER share a folder with a previous milestone.
+
 Place screenshots under:
 
-- `docs/timeline/assets/<milestone>/`
+- `docs/timeline/assets/<new-milestone-id>/`
 
 Examples:
-- `docs/timeline/assets/01-stage-1a/`
-- `docs/timeline/assets/02-stage-1b/`
+- `docs/timeline/assets/01-stage-1a/` — original Stage 1A images live here permanently
+- `docs/timeline/assets/02-shell-01a/` — SHELL-01A v2 images live here permanently
+- `docs/timeline/assets/03-stage-1b/` — next milestone will get its own folder
 
-Use descriptive filenames:
-- `shell-home.png`
-- `me-runtime-empty.png`
-- `channel-switch-overlay.png`
+Use descriptive filenames that include the milestone context:
+- `shell-01a-boot.png`
+- `shell-01a-desktop.png`
+- `stage-1b-services-wired.png`
+
+## Asset preservation rules — CRITICAL
+
+**Never delete, overwrite, or rename existing screenshot assets.**
+
+Old screenshots are permanent historical records. They show what the product looked like at a specific point in time. Losing them means losing the visual progression story.
+
+Rules:
+- Each new milestone MUST use a new folder under `docs/timeline/assets/`
+- If you are adding images for a new milestone, create a new folder — do not add to an existing milestone's folder
+- Existing asset files must never be removed or overwritten, even if the UI looks different now
+- If you are refreshing screenshots for a past milestone, add them with a new name (e.g. `shell-home-v2.png`) — do not replace the original file
+
+If you are unsure whether an asset already exists, check first before writing.
 
 ## Required workflow
 

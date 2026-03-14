@@ -80,8 +80,17 @@ If Playwright is not installed or not runnable on the current device, agents mus
 
 ## Timeline documentation
 
-For any meaningful visible milestone, agents should use `timeline-updater` to keep the timeline readable for non-technical readers.
+For any meaningful visible milestone, agents must use `timeline-updater` to keep the timeline readable for non-technical readers.
 
-For screenshot and visual asset refresh work, agents should use `ui-milestone-capture` after Playwright preflight passes.
+For screenshot and visual asset refresh work, agents must use `ui-milestone-capture` after Playwright preflight passes.
 
 Any task that requests screenshots, preview capture, or timeline/PDF refresh is considered incomplete unless Playwright preflight passes or the user is explicitly informed that Playwright is unavailable.
+
+Timeline completion gate for visible/milestone work:
+- update/create the correct file in `docs/timeline/milestones/`
+- update `docs/timeline/TIMELINE.md`
+- update `docs/timeline/site/timeline.html` when the narrative shown in the PDF changes
+- refresh screenshots in `docs/timeline/assets/<milestone>/` when visual state changed or capture was requested
+- preserve historical assets: never overwrite or delete existing timeline screenshots; add new files/folders for new states
+- regenerate `docs/timeline/exports/neos-timeline.pdf` when timeline text/images changed or PDF was requested
+- report what was updated (or why it was intentionally skipped) before marking the task complete

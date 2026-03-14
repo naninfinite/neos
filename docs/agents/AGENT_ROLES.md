@@ -19,6 +19,12 @@ Responsibilities:
 - Maintain long‑term design consistency
 - Propose architecture improvements when necessary
 
+Timeline responsibilities:
+- Validate milestone scope before implementation begins
+- Confirm the timeline update is complete before signing off on a milestone
+- Block milestone sign-off if timeline docs, screenshots, or PDF are missing
+- Block sign-off if historical timeline assets were overwritten or removed
+
 Typical tasks:
 - Reviewing technical architecture
 - Validating data models
@@ -39,6 +45,15 @@ Responsibilities:
 - Generate scaffolds and implementations
 - Avoid architectural drift
 
+Timeline responsibilities:
+- After completing a visible UI milestone, always trigger the timeline pipeline:
+  1. `playwright-timeline-guard` — confirm Playwright is runnable
+  2. `ui-milestone-capture` — capture screenshots into `docs/timeline/assets/<milestone>/`
+  3. `timeline-updater` — write the milestone markdown, update TIMELINE.md and timeline.html, regenerate the PDF
+- Include a timeline update in the validation checklist on every milestone delivery
+- Never mark a milestone complete without confirming the timeline was updated
+- Never overwrite or delete existing timeline screenshots; add new asset names/folders for new states
+
 Typical tasks:
 - Writing code
 - Implementing modules
@@ -57,6 +72,16 @@ Responsibilities:
 - Identify inconsistencies
 - Confirm implementations match specifications
 - Provide neutral validation across the system
+
+Timeline responsibilities:
+- On every milestone validation, include a timeline gate check:
+  - Are screenshots present in the correct asset folder?
+  - Is the milestone markdown file written and complete?
+  - Is TIMELINE.md updated?
+  - Is timeline.html updated?
+  - Is neos-timeline.pdf current?
+- Confirm older milestone screenshots are still present (no history wipe)
+- Do not issue a final milestone sign-off until all timeline items above are confirmed
 
 Typical tasks:
 - Reviewing implementations

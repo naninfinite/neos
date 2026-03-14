@@ -69,7 +69,30 @@ Use the existing stage naming pattern where possible.
 
 Examples:
 - `01-stage-1a-shell-scaffold.md`
-- `02-stage-1b-runtime-bootstrap.md`
+- `02-shell-01a-desktop-frame.md`
+- `03-stage-1b-runtime-bootstrap.md`
+
+**Never edit a completed milestone file to remove or replace its content.** Past milestones are a permanent record. If a stage has been superseded by a rewrite, write a new milestone file for the new work and note the transition — do not overwrite the old one.
+
+## Asset history rules — CRITICAL
+
+- Existing files under `docs/timeline/assets/` are historical records.
+- Never overwrite an existing screenshot file with a newer UI state.
+- For new captures, use a new filename or a new milestone folder.
+- If a previous screenshot needs correction, keep the old file and add a corrected sibling file (for example `shell-home-corrected.png`) with an explanation in milestone notes.
+
+## HTML progression rules — CRITICAL
+
+When updating `docs/timeline/site/timeline.html`:
+
+- **Always append new milestone articles** — never replace existing ones
+- The HTML document is a chronological timeline; older milestones must remain visible above newer ones
+- Each milestone gets its own `<article class="milestone">` block
+- Do not remove or replace existing `<article>`, `<figure>`, or `<img>` elements from previous milestones
+- Update only the hero `<p class="muted">` line to reflect the latest milestone name
+- Update the Timeline Map `<ol>` to include the new milestone in the correct position
+
+The full progression from start to present must always be visible in the rendered document.
 
 ## Required sections for a milestone file
 
@@ -95,11 +118,17 @@ Add a short summary line with a link to the milestone file.
 
 ## Publishing rules
 
-If the visual change is meaningful:
+For every milestone update, all of the following are required — not optional:
 
-- ensure the milestone references the correct screenshot assets
-- ensure timeline HTML is updated if needed
-- ensure PDF export is refreshed if requested or part of the workflow
+1. Milestone markdown written or updated in `docs/timeline/milestones/`
+2. `docs/timeline/TIMELINE.md` updated with a summary line linking to the milestone file
+3. `docs/timeline/site/timeline.html` updated to include the new milestone entry and images
+4. Screenshots confirmed present in `docs/timeline/assets/<milestone>/`
+5. `docs/timeline/exports/neos-timeline.pdf` regenerated from the updated HTML
+
+Do not consider a timeline update complete until all five items above are done.
+
+If the PDF regeneration step is blocked (e.g. Playwright not available), stop and tell the user explicitly. Do not silently skip it.
 
 ## Scope discipline
 
