@@ -25,14 +25,48 @@ The legacy Terminal-OS repository is reference-only and must not be treated as t
 - Codex — implementation
 - Gemini — validation
 
+## Active lanes
+
+### SITE-SHELL (current priority)
+Implement the liquid glass channel surface as the site root.
+
+**Completed:**
+- SITE-SHELL-01: `src/site/` structure mounted; `SiteShell`, `ChannelSurface`, `SiteBootOverlay`, `siteStore`
+- SITE-SHELL-01B: `src/site/glass/` WebGL2 refraction renderer; warm neutral palette; reference-calibrated glass parameters (D-25, D-26)
+
+**Active:**
+- `src/main.tsx` mounts `SiteShell`, not `OsBootstrap`
+- Aesthetic: warm neutral, transparent, glassmorphic — no blue, no opaque fills
+- WebGL2 canvas at `z-index: 0`; glass regions self-register via `useGlassRegion`
+- No OS desktop, no windowing, no app runtime at this layer
+
+### ME-DESKTOP (Phase 2 — not yet active)
+Wire the existing `src/desktop/` OS shell code into ME.EXE.
+- Uses SHELL-01A/01B code from `src/desktop/` and `src/windowing/`
+- Operates exclusively inside the ME.EXE channel
+- Do not start this lane until SITE-SHELL is stable
+
+### CHANNEL-YOU / CHANNEL-THIRD (Phase 3 — frozen)
+Isolated channel runtimes for YOU.EXE and THIRD.EXE.
+Not started.
+
+### CONNECT-IMPLEMENTATION (frozen)
+Do not implement. Frozen per D-16.
+
+### SHELL-DESKTOP (retired as a site-wide lane)
+This lane was building the OS desktop as a site-wide shell. That direction is superseded by D-20.
+The code built in this lane (`src/desktop/`, `src/windowing/`) is preserved and will be used in ME-DESKTOP.
+Do not continue building site-wide desktop/shell components.
+
 ## Workflow rules
 
 - Make small, reviewable changes
 - Update docs if contracts change
 - Do not invent unresolved behaviour
 - Flag contradictions instead of guessing
-- Preserve strict separation between shell, services, and apps
-- Treat the legacy repo as behaviour reference only
+- The site root is a channel surface — never mount OS desktop components at site level
+- Each channel is isolated — do not share state across channels
+- Treat the legacy repo as visual/behaviour reference only
 - Never copy legacy architecture blindly
 
 ## Implementation posture

@@ -31,10 +31,12 @@ Use it to answer:
 Product, UX, information architecture, and overall design direction.
 
 ### `02-runtime-architecture.md`
-Shell architecture, subsystem boundaries, and runtime responsibilities.
+Runtime architecture for the **ME.EXE channel** — shell subsystems, windowing, services, and boundaries.
+This document describes the OS desktop experience inside ME.EXE, not the site root.
 
 ### `03-type-contracts.md`
-Folder structure, interfaces, store shapes, manifest patterns, and API contracts.
+Type contracts, folder layout, interfaces, store shapes, and API contracts for the **ME.EXE channel**.
+These contracts do not apply to the site-level channel surface (`src/site/`).
 
 ### `04-issues-register.md`
 Historical reconciliation record showing the contradictions and omissions found during pre-build review.

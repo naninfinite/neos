@@ -18,34 +18,32 @@
           looked like at that step.
         </p>
         <p class="muted">
-          Current coverage: Stage 1A (original shell UI) → SHELL-01A v2 (desktop shell rewrite).
+          Current coverage: Stage 1A (original) → SHELL-01A/01B (v2 desktop shell) → SITE-SHELL-01 (liquid glass root) → SITE-SHELL-01B (WebGL2 refraction renderer).
         </p>
       </section>
 
       <section class="section">
         <h2>Project Snapshot</h2>
         <p>
-          The team reset implementation discipline before the v2 rewrite. Work
-          is sequenced by lane and controlled by spec authority order.
+          The project confirmed its product direction on 2026-03-14. The site
+          root is a liquid glass channel surface. The OS desktop experience
+          lives inside ME.EXE as an isolated channel.
         </p>
         <ul>
-          <li>Active implementation lanes: SHELL-DESKTOP, WINDOWING-OSAPI.</li>
-          <li>
-            HOME-INTEGRATION is allowed only when it directly supports shell
-            rules.
-          </li>
-          <li>CONNECT-SPEC is discussion-only.</li>
-          <li>CONNECT-IMPLEMENTATION is currently frozen.</li>
+          <li>Active lane: SITE-SHELL — liquid glass channel surface.</li>
+          <li>Phase 2 (deferred): ME-DESKTOP — OS desktop wired into ME.EXE.</li>
+          <li>CONNECT-IMPLEMENTATION is frozen.</li>
+          <li>The SHELL-01A/01B OS desktop code is preserved for ME-DESKTOP.</li>
         </ul>
         <div class="stage-map">
           <h3>Timeline Map</h3>
           <ol>
-            <li>Stage 0: Foundations</li>
-            <li>Stage 1A: First shell UI pass (original HOME channel navigation)</li>
-            <li>SHELL-01A v2: Desktop shell frame rewrite (current)</li>
-            <li>Stage 1B: Runtime bootstrap and core services</li>
-            <li>Stage 2: Window manager behavior</li>
-            <li>Stage 3+: App runtime and core apps</li>
+            <li>Stage 1A (original): First shell UI pass — liquid glass channel navigation</li>
+            <li>SHELL-01A/01B (v2 build): OS desktop shell frame — re-scoped to ME.EXE</li>
+            <li>SITE-SHELL-01: Liquid glass channel surface mounted as site root</li>
+            <li>SITE-SHELL-01B: WebGL2 liquid glass renderer — reference-calibrated refraction, warm neutral palette (current)</li>
+            <li>ME-DESKTOP: OS desktop wired into ME.EXE (Phase 2)</li>
+            <li>Other channels: YOU.EXE, THIRD.EXE (Phase 3)</li>
           </ol>
         </div>
       </section>
@@ -171,6 +169,56 @@
         </p>
       </section>
 
+      <article class="milestone">
+        <p class="kicker">SITE-SHELL-01</p>
+        <h2>Liquid Glass Channel Surface Root</h2>
+        <p>
+          This milestone rewired the app root from OS desktop boot to a light,
+          transparent channel surface.
+        </p>
+        <p>
+          `src/main.tsx` now mounts `SiteShell` from `src/site/`. The site root
+          shows ME.EXE, YOU.EXE, and THIRD.EXE entries as placeholder channel
+          panels, while runtime internals remain isolated and deferred.
+        </p>
+        <figure>
+          <img
+            src="../assets/03-site-shell-01/site-shell-boot.png"
+            alt="SITE-SHELL-01 entry overlay on the light liquid glass site shell"
+          />
+          <figcaption>
+            Site entry overlay: lightweight branded entry moment, distinct from
+            OS boot sequence.
+          </figcaption>
+        </figure>
+        <figure>
+          <img
+            src="../assets/03-site-shell-01/site-shell-home.png"
+            alt="SITE-SHELL-01 channel surface with ME.EXE, YOU.EXE, and THIRD.EXE entries"
+          />
+          <figcaption>
+            Liquid glass channel surface at root level, with isolated channel
+            entry cards and no site-level desktop runtime.
+          </figcaption>
+        </figure>
+      </article>
+
+      <section class="code-card">
+        <p class="kicker">Important code — SITE-SHELL-01</p>
+        <h3>Root Mount Rewire</h3>
+        <pre><code>import { SiteShell } from './site/SiteShell';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  &lt;React.StrictMode&gt;
+    &lt;SiteShell /&gt;
+  &lt;/React.StrictMode&gt;
+);</code></pre>
+        <p>
+          This isolates desktop/windowing code from the site root and restores
+          channel-surface-first navigation as the primary entry model.
+        </p>
+      </section>
+
       <section class="section">
         <h2>What Was Intentionally Deferred in SHELL-01A</h2>
         <ul>
@@ -182,17 +230,59 @@
         </ul>
       </section>
 
+      <article class="milestone">
+        <p class="kicker">SITE-SHELL-01B</p>
+        <h2>WebGL2 Liquid Glass Renderer</h2>
+        <p>
+          A raw WebGL2 refraction renderer was added beneath the site shell panels.
+          The glass effect is physically grounded — Snell's law refraction,
+          Poisson-disk blur, specular rim lighting, and a convex squircle surface
+          profile matching the archisvaze/liquid-glass reference.
+        </p>
+        <p>
+          Parameters were calibrated to the reference defaults: IOR 3.0, blur 2 px
+          (nearly clear), bezel 60 px, specular 0.5. The surface profile was updated
+          from a simple power curve to the reference's convex squircle function.
+        </p>
+        <p>
+          The blue colour palette was replaced with warm neutrals. Buttons became
+          nearly-transparent glass panels with backdrop blur rather than opaque white fills.
+        </p>
+        <h3>What this established</h3>
+        <ul>
+          <li>A single full-screen WebGL2 canvas rendering all glass regions in one shader pass.</li>
+          <li>A glass registry and React hook for components to self-register their bounding rects.</li>
+          <li>Zero new runtime dependencies — raw WebGL2 only.</li>
+          <li>Visual parity with the archisvaze/liquid-glass reference implementation.</li>
+          <li>Warm neutral colour palette (no blue) throughout the site shell.</li>
+        </ul>
+      </article>
+
+      <section class="code-card">
+        <p class="kicker">Important code — SITE-SHELL-01B</p>
+        <h3>Convex Squircle Surface Profile (GLSL)</h3>
+        <pre><code>// Matches archisvaze/liquid-glass reference
+float surfaceHeight(float t) {
+  return pow(1.0 - pow(1.0 - t, 4.0), 0.25);
+}</code></pre>
+        <p>
+          This surface profile produces the characteristic lens-like bulge at the
+          glass edges with a relatively flat interior — matching the reference's
+          natural liquid glass appearance.
+        </p>
+      </section>
+
       <section class="section">
         <h2>Next Milestone Focus</h2>
         <p>
-          Stage 1B should wire runtime bootstrap and core services without
-          breaking the shell boundaries established in SHELL-01A.
+          SITE-SHELL-02 should deepen channel navigation behavior while keeping
+          the site shell lightweight and isolated from ME desktop runtime.
         </p>
         <ul>
-          <li>Add service scaffolding and typed contracts.</li>
-          <li>Keep boot non-blocking for VFS readiness.</li>
-          <li>Begin window manager integration through the placeholder <code>WindowLayer</code>.</li>
-          <li>Maintain the desktop as a lightweight preview surface.</li>
+          <li>Polish channel-entry interactions and transitions.</li>
+          <li>Keep all heavy runtime mounts deferred to channel internals.</li>
+          <li>Maintain ME-DESKTOP code unmounted at site level.</li>
+          <li>Prepare clean handoff to ME-DESKTOP-01 (Phase 2).</li>
         </ul>
       </section>
     </main>

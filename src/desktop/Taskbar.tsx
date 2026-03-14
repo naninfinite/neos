@@ -1,5 +1,6 @@
 import type { CSSProperties, JSX } from 'react';
 import { SHELL_Z_INDEX, TASKBAR_HEIGHT_PX } from '../core/types';
+import { useDesktopStore } from './desktopStore';
 
 const taskbarStyle: CSSProperties = {
   position: 'absolute',
@@ -40,9 +41,18 @@ const placeholderStyle: CSSProperties = {
 };
 
 export function Taskbar(): JSX.Element {
+  const launcherOpen = useDesktopStore((store) => store.launcherOpen);
+  const toggleLauncher = useDesktopStore((store) => store.toggleLauncher);
+
   return (
     <footer style={taskbarStyle}>
-      <button disabled style={launcherButtonStyle} type="button">
+      <button
+        aria-label="Toggle launcher"
+        aria-pressed={launcherOpen}
+        style={launcherButtonStyle}
+        type="button"
+        onClick={toggleLauncher}
+      >
         Launcher
       </button>
       <div style={placeholderStyle}>Task Area Placeholder</div>

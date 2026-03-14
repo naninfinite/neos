@@ -2,15 +2,19 @@
 
 ## Project
 
-**Working title:** Terminal-OS v2  
-**Status:** spec pack locked for implementation kickoff  
-**Phase:** fresh rewrite in a new repo using the legacy project as read-only reference
+**Working title:** Terminal-OS v2
+**Status:** architecture direction updated — channel surface as site root, OS inside ME.EXE
+**Phase:** fresh rewrite in this repo; legacy project is read-only reference
 
 ## Project definition
 
-Terminal-OS v2 is a browser-based desktop environment and portfolio shell.
+Terminal-OS v2 is a browser-based portfolio experience built around isolated channel surfaces.
 
-It is not a real operating system. It is a curated, explorable personal computing environment that uses OS language, windows, apps, and a virtual filesystem to present work, experimentation, and identity.
+Visitors land on a **liquid glass channel surface** — a light, transparent, glassmorphic site shell that provides navigation to the product's channels. Each channel is an isolated runtime with its own experience and aesthetic.
+
+**ME.EXE** is the channel that hosts the full OS desktop experience: windows, taskbar, launcher, apps, and the virtual filesystem. The OS metaphor lives inside ME.EXE, not at the site root.
+
+**YOU.EXE**, **THIRD.EXE**, and other channels each mount their own isolated runtimes when entered.
 
 ## Working-title / naming rule
 
@@ -45,46 +49,54 @@ If documents conflict, use this order:
 
 ## Scope for initial v2 build
 
-### In scope
+### Layer 1 — Site shell (immediate priority)
 
-- shell / desktop / taskbar / launcher
-- window manager
-- mobile adaptation layer
-- typed event bus
-- virtual filesystem service
-- storage service
-- notifications
-- settings
-- core apps:
-  - Home
-  - Terminal
-  - FileMan
-  - Arcade
-  - ME
-  - YOU
-  - THIRD
-  - Settings
-- hidden viewer apps for file opening:
-  - `viewer_text`
-  - `viewer_image`
-  - `viewer_pdf`
+- Liquid glass channel surface: light, transparent, glassmorphic aesthetic
+- Channel navigation and routing
+- Boot / entry sequence for the site
+- Isolated channel mounting and unmounting
+
+### Layer 2 — ME.EXE channel (OS desktop experience)
+
+The following belong inside ME.EXE, not at the site root:
+
+- Desktop shell / taskbar / launcher
+- Window manager
+- Mobile adaptation layer for ME.EXE
+- Typed event bus
+- Virtual filesystem service
+- Storage service
+- Notifications
+- Settings
+- Core OS apps: Terminal, FileMan, Arcade, Settings
+- Hidden viewer apps: `viewer_text`, `viewer_image`, `viewer_pdf`
+- ME.EXE personal surface (About / identity)
+
+### Layer 3 — Other channels
+
+- YOU.EXE: social / message-board surface (isolated runtime)
+- THIRD.EXE: three.js / 3D world-building surface (isolated runtime)
+- CONNECT.EXE: frozen, not in initial scope
 
 ### Out of scope unless separately re-locked later
 
 - legacy in-place refactor
 - server-first architecture
 - route-based app navigation
-- desktop icon position persistence in v2
-- CONNECT.EXE as a required launch-day v2 app
+- desktop icon position persistence
+- CONNECT.EXE as a required launch-day app
 
 ## Non-negotiable architectural rules
 
-1. **OS shell and apps are separate layers.**
-2. **Apps only talk to the shell through `OsApi`.**
-3. **Services live outside React where appropriate.**
-4. **Window state is owned by the window manager only.**
-5. **Specs override memory or ad-hoc agent assumptions.**
-6. **When a behaviour is superseded by the Decisions Lock, the older wording is obsolete even if still present in older docs.**
+1. **The site root is a liquid glass channel surface, not an OS desktop.**
+2. **The OS desktop experience (windows, taskbar, launcher, apps) lives inside ME.EXE only.**
+3. **Each channel is isolated — channels do not share runtime state with each other or with the site shell.**
+4. **Heavy runtimes (WebGL, audio, physics, multiplayer) mount only after explicit channel entry and must unmount on exit.**
+5. **Inside ME.EXE: OS shell and apps are separate layers. Apps only talk to the shell through `OsApi`.**
+6. **Services live outside React where appropriate.**
+7. **Window state is owned by the window manager only (within ME.EXE).**
+8. **Specs override memory or ad-hoc agent assumptions.**
+9. **When a behaviour is superseded by the Decisions Lock, the older wording is obsolete even if still present in older docs.**
 
 ## Canonical implementation posture
 
@@ -107,13 +119,21 @@ Before Codex starts any task, it should confirm:
 
 ## Kickoff milestone order
 
-1. scaffold repo and folder structure
-2. implement core types and services
-3. implement desktop + boot + taskbar shell
-4. implement windowing layer and `OsApi`
-5. implement launcher and app registration flow
-6. implement core apps
-7. implement validation / regression passes
+**Phase 1 — Site shell (current priority)**
+1. Implement liquid glass channel surface as site root (`src/site/`)
+2. Channel navigation and routing
+3. Boot / entry sequence for the site
+
+**Phase 2 — ME.EXE OS desktop**
+4. Wire existing `src/desktop/` shell code into ME.EXE channel
+5. Implement windowing layer and `OsApi` inside ME.EXE
+6. Implement launcher and app registration flow inside ME.EXE
+7. Implement core OS apps (Terminal, FileMan, Arcade, Settings)
+
+**Phase 3 — Other channels**
+8. YOU.EXE runtime
+9. THIRD.EXE runtime
+10. Validation / regression passes
 
 ## Long-term product surfaces
 

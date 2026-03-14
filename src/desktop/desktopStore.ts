@@ -48,6 +48,7 @@ export interface DesktopStoreActions {
   completeBoot(): void;
   openLauncher(): void;
   closeLauncher(): void;
+  toggleLauncher(): void;
   showContextMenu(state: ContextMenuState): void;
   dismissContextMenu(): void;
   pushNotification(notification: OsNotification): void;
@@ -105,6 +106,9 @@ const actions: DesktopStoreActions = {
   },
   closeLauncher(): void {
     setState((previous) => ({ ...previous, launcherOpen: false }));
+  },
+  toggleLauncher(): void {
+    setState((previous) => ({ ...previous, launcherOpen: !previous.launcherOpen }));
   },
   showContextMenu(nextContext: ContextMenuState): void {
     setState((previous) => ({ ...previous, contextMenu: nextContext }));

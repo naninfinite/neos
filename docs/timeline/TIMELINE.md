@@ -6,35 +6,38 @@ It is written to make the project understandable to both technical and non-techn
 
 ## Timeline stages
 
+**Phase 1 — Site Shell (current)**
+- SITE-SHELL-01 — Liquid glass channel surface as site root
+- SITE-SHELL-02 — Channel navigation and routing
+- SITE-SHELL-03 — Site boot / entry sequence
+
+**Phase 2 — ME.EXE OS Desktop**
+- ME-DESKTOP-01 — Wire existing shell code into ME.EXE channel
+- ME-DESKTOP-02 — Window manager inside ME.EXE
+- ME-DESKTOP-03 — App runtime and launcher inside ME.EXE
+- ME-DESKTOP-04 — Core OS apps
+
+**Phase 3 — Other channels**
+- YOU.EXE runtime
+- THIRD.EXE runtime
+
+**Historical stages (for reference)**
 - Stage 0 — Foundations
-- Stage 1A — Shell Scaffold
-- Stage 1B — Runtime Bootstrap
-- Stage 2 — Window Manager
-- Stage 3 — App Runtime
-- Stage 4 — Core Apps
-- Stage 5 — UX Polish
-- Stage 6 — Identity / Visual Evolution
+- Stage 1A (original) — First shell UI pass (liquid glass channel navigation)
+- SHELL-01A/01B (v2 build) — OS desktop shell frame — now re-scoped to ME.EXE
 
 ## Current status
 
-Stage 1A (SHELL-01A) is implemented as a desktop shell frame milestone.
+**Architecture direction updated 2026-03-14.**
 
-The project now lands into a structured desktop root with a boot gate,
-preview surface, static taskbar, and a placeholder window runtime layer.
-Heavy runtimes are still deferred.
+The project has confirmed its product direction: the site root is a liquid glass channel surface (light, transparent, glassmorphic). The OS desktop experience lives inside ME.EXE as an isolated channel.
 
-## Why Stage 1A matters
+SITE-SHELL-01 and SITE-SHELL-01B are now complete.
 
-Stage 1A is the first milestone where NEOS presents a real shell frame rather
-than a starter placeholder.
+SITE-SHELL-01 wired the site root to a liquid glass channel surface structure.
+SITE-SHELL-01B added a raw WebGL2 refraction renderer (`src/site/glass/`), calibrated to the archisvaze/liquid-glass reference parameters, and replaced the blue palette with warm neutral tones.
 
-It locked five core ideas:
-
-- shell layer order is explicit
-- boot overlay is present and non-blocking
-- desktop remains a lightweight preview surface
-- runtime mounting is isolated to `WindowLayer`
-- taskbar zones exist before task logic is introduced
+The SHELL-01A/01B OS desktop code remains preserved and will be integrated into ME.EXE in Phase 2.
 
 ## How to read this
 
@@ -49,16 +52,19 @@ non-technical reviewers.
 
 ### Planned next milestones
 
-- Stage 1B — runtime folder structure, initial services/core shell
-- Stage 2 — first functional window manager
+- SITE-SHELL-02 — channel navigation and routing polish
+- SITE-SHELL-03 — site boot/entry refinement
+- ME-DESKTOP-01 — OS desktop wired into ME.EXE channel (Phase 2)
 
 ### What reviewers should expect next
 
-- clearer service/bootstrap wiring details in timeline docs
-- first window lifecycle examples after `WindowLayer` integration
-- updated screenshots showing transition from static shell to managed windows
+- The site shell will gain richer navigation behavior while staying lightweight
+- Screenshots will continue showing light liquid-glass direction
+- ME.EXE will then reveal the OS desktop experience when entered
 
 ### Completed milestone highlights
 
 - Stage 1A (original) — first shell UI pass: hero HOME composition, channel navigation, ME.EXE taskbar boundary (`docs/timeline/milestones/01-stage-1a-shell-scaffold.md`)
 - SHELL-01A (v2) — desktop shell frame + boot gate + static taskbar, contract-first v2 rewrite with Playwright screenshots (`docs/timeline/milestones/02-shell-01a-desktop-frame.md`)
+- SITE-SHELL-01 — liquid glass channel surface mounted as new site root (`docs/timeline/milestones/03-site-shell-01-liquid-glass-root.md`)
+- SITE-SHELL-01B — WebGL2 liquid glass renderer added; visual refinement to warm neutral palette, reference-calibrated refraction (`docs/timeline/milestones/04-site-shell-01b-webgl-glass-renderer.md`)

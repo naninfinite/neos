@@ -44,4 +44,20 @@ Codex triggers this pipeline after implementation. Gemini checks it during valid
 
 If Playwright is not available, agents must stop and tell the user before skipping any visual step.
 
+Active architecture (as of 2026-03-14):
+
+- Site root = liquid glass channel surface (`src/site/`) — warm neutral, transparent, glassmorphic
+- WebGL2 glass renderer lives in `src/site/glass/` — raw WebGL2, no Three.js (D-25)
+- Colour palette: warm neutral (`#f5e6d3 → #c4956a`), warm dark text (`#2d2520`) — no blue (D-26)
+- ME.EXE = OS desktop experience (windowing, taskbar, launcher, apps) — isolated channel
+- Each channel is isolated; channels do not share state with each other or the site shell
+- `src/main.tsx` mounts `SiteShell`, not `OsBootstrap`
+- `src/desktop/` code is scoped to ME.EXE (Phase 2); do not mount it at site root
+
+Active lane: SITE-SHELL
+Completed: SITE-SHELL-01 (structure), SITE-SHELL-01B (WebGL2 glass + visual refinement)
+Frozen lanes: ME-DESKTOP (Phase 2), CHANNEL-YOU, CHANNEL-THIRD, CONNECT-IMPLEMENTATION
+
+Read `docs/spec/05-implementation-decisions-lock.md` D-20 through D-26 before any implementation.
+
 Continue from the latest milestone or open task.

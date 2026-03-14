@@ -2,6 +2,7 @@ import type { CSSProperties, JSX } from 'react';
 import { SHELL_Z_INDEX, TASKBAR_HEIGHT_PX } from '../core/types';
 import { WindowLayer } from '../windowing/WindowLayer';
 import { BootSequence } from './BootSequence';
+import { Launcher } from './Launcher';
 import { Taskbar } from './Taskbar';
 import { useDesktopStore } from './desktopStore';
 import { Wallpaper } from './Wallpaper';
@@ -37,6 +38,13 @@ const previewBadgeStyle: CSSProperties = {
 
 export function Desktop(): JSX.Element {
   const bootComplete = useDesktopStore((store) => store.bootComplete);
+  const launcherOpen = useDesktopStore((store) => store.launcherOpen);
+  const closeLauncher = useDesktopStore((store) => store.closeLauncher);
+
+  const onPlaceholderLaunch = (id: string): void => {
+    window.console.info(`[launcher-placeholder] ${id}`);
+    closeLauncher();
+  };
 
   return (
     <main aria-label="Desktop shell" style={desktopStyle}>
@@ -48,6 +56,9 @@ export function Desktop(): JSX.Element {
 
       <WindowLayer />
       <Taskbar />
+      {launcherOpen ? (
+        <Launcher onClose={closeLauncher} onPlaceholderLaunch={onPlaceholderLaunch} />
+      ) : null}
       {!bootComplete ? <BootSequence /> : null}
     </main>
   );

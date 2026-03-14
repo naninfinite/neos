@@ -10,6 +10,13 @@
 > If this file conflicts with `SOURCE_OF_TRUTH.md` or `05-implementation-decisions-lock.md`, follow those files.
 > Working title: **Terminal-OS v2**. Project rename is allowed later; architecture and contracts remain valid.
 
+> [!IMPORTANT]
+> **Scope clarification (updated 2026-03-14):**
+> This document describes the runtime architecture of the **ME.EXE channel** — the OS desktop experience that lives inside ME.EXE.
+> It does **not** describe the site root or the liquid glass channel surface.
+> The site root is a separate layer (`src/site/`) defined by D-20 in `05-implementation-decisions-lock.md`.
+> Do not use this document to guide site-shell implementation.
+
 
 ## Overview: The Runtime Model
 

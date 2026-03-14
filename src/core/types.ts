@@ -11,6 +11,7 @@ export const SHELL_Z_INDEX = {
   DESKTOP_ICONS: 10,
   WINDOWS: 100,
   TASKBAR: 900,
+  LAUNCHER: 1000,
   OVERLAY: 9999,
 } as const;
 

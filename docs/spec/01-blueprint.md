@@ -6,6 +6,13 @@
 > If this file conflicts with `SOURCE_OF_TRUTH.md` or `05-implementation-decisions-lock.md`, follow those files.
 > Working title: **Terminal-OS v2**. Project rename is allowed later; architecture and contracts remain valid.
 
+> [!IMPORTANT]
+> **Direction update (2026-03-14):**
+> The product direction in this document describes the OS desktop experience, which now lives inside **ME.EXE** only — not at the site root.
+> The site root is a **liquid glass channel surface** (light, transparent, glassmorphic) — see D-20–D-24 in `05-implementation-decisions-lock.md`.
+> Section 2.4 Design Tone ("dark terminals") applies to ME.EXE's internal aesthetic. The site shell uses a light glassmorphic aesthetic.
+> When this document conflicts with the Decisions Lock, the Decisions Lock wins.
+
 ## Architecture & UX Blueprint
 
 *Specification Document for the Claude–Codex–Gemini Build Pipeline*

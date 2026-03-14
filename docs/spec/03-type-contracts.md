@@ -4,6 +4,13 @@
 > This is the implementation contract for the v2 rewrite.
 > If this file conflicts with older wording elsewhere, this file wins unless `05-implementation-decisions-lock.md` says otherwise.
 
+> [!IMPORTANT]
+> **Scope clarification (updated 2026-03-14):**
+> The types, contracts, folder layout, and API shapes in this document apply to the **ME.EXE channel** (OS desktop experience).
+> They do **not** apply to the site-level channel surface (`src/site/`).
+> The site shell has its own lightweight component structure and does not use `OsApi`, `WindowState`, `desktopStore`, or the app registry.
+> Before implementing anything from this document, confirm you are working inside ME.EXE scope, not the site root.
+
 ## Intent
 
 This document gives Codex an unambiguous scaffold and contract set to build from.
