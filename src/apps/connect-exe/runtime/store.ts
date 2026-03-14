@@ -272,19 +272,6 @@ export const connectRuntimeStore = {
     }));
   },
 
-  setPlayerStamina(role: PlayerRole, stamina: number): void {
-    update((current) => ({
-      ...current,
-      players: {
-        ...current.players,
-        [role]: {
-          ...current.players[role],
-          stamina: Math.max(0, Math.min(100, stamina)),
-        },
-      },
-    }));
-  },
-
   setMapOpen(role: PlayerRole, isMapOpen: boolean): void {
     update((current) => withMapFreeze(current, role, isMapOpen));
   },
