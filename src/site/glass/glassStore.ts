@@ -10,12 +10,16 @@ export interface GlassMaterialPreset {
   shadow: number;
 }
 
+export type WallpaperPreset = 'reference' | 'diagnostic' | 'editorial' | 'gradient';
+
 export interface GlassStoreState extends GlassMaterialPreset {
-  visible: boolean; // For dev panel visibility
+  visible: boolean;
+  wallpaper: WallpaperPreset;
 }
 
 export interface GlassStoreActions {
   setParam(key: keyof GlassMaterialPreset, value: number): void;
+  setWallpaper(preset: WallpaperPreset): void;
   togglePanel(): void;
   resetToDefaults(): void;
 }
@@ -60,6 +64,7 @@ let state: GlassStoreState = {
   ...DEFAULTS,
   ...loadSavedParams(),
   visible: false,
+  wallpaper: 'reference',
 };
 
 const listeners = new Set<Listener>();
@@ -75,9 +80,9 @@ const setState = (updater: (current: GlassStoreState) => GlassStoreState): void 
   }
   state = nextState;
   
-  // Persist material params
+  // Persist material params (exclude UI-only fields)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { visible, ...params } = state;
+  const { visible, wallpaper, ...params } = state;
   saveParams(params);
   
   snapshot = buildSnapshot();
@@ -87,6 +92,9 @@ const setState = (updater: (current: GlassStoreState) => GlassStoreState): void 
 const actions: GlassStoreActions = {
   setParam(key: keyof GlassMaterialPreset, value: number): void {
     setState((current) => ({ ...current, [key]: value }));
+  },
+  setWallpaper(preset: WallpaperPreset): void {
+    setState((current) => ({ ...current, wallpaper: preset }));
   },
   togglePanel(): void {
     setState((current) => ({ ...current, visible: !current.visible }));

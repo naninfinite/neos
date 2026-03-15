@@ -1,5 +1,5 @@
 import { useEffect, useRef, type CSSProperties, type ChangeEvent, type JSX } from 'react';
-import { glassStore, type GlassMaterialPreset, useGlassStore } from './glassStore';
+import { glassStore, type GlassMaterialPreset, type WallpaperPreset, useGlassStore } from './glassStore';
 import { useGlassRegion } from './useGlassRegion';
 
 const panelStyle = {
@@ -57,6 +57,29 @@ interface SliderConfig {
   format: (v: number) => string;
 }
 
+const wallpaperButtonStyle = {
+  borderRadius: '8px',
+  border: '1px solid rgba(255,255,255,0.5)',
+  background: 'rgba(255,255,255,0.12)',
+  padding: '0.34rem 0.58rem',
+  fontSize: '0.7rem',
+  fontWeight: 600,
+  color: '#2d2520',
+  cursor: 'pointer',
+} satisfies CSSProperties;
+
+const wallpaperButtonActiveStyle = {
+  borderColor: 'rgba(255,255,255,0.85)',
+  background: 'rgba(255,255,255,0.3)',
+} satisfies CSSProperties;
+
+const WALLPAPER_OPTIONS: { key: WallpaperPreset; label: string }[] = [
+  { key: 'reference', label: 'Interior' },
+  { key: 'editorial', label: 'Mountain' },
+  { key: 'diagnostic', label: 'Block Color' },
+  { key: 'gradient', label: 'Gradient' },
+];
+
 const SLIDERS: SliderConfig[] = [
   { key: 'ior', label: 'IOR', min: 1, max: 3, step: 0.01, format: (v) => v.toFixed(2) },
   { key: 'thickness', label: 'Thickness', min: 0, max: 200, step: 1, format: (v) => v.toFixed(0) },
@@ -100,6 +123,28 @@ export function GlassTuningPanel(): JSX.Element | null {
       <p style={{ margin: '0.32rem 0 1rem', fontSize: '0.74rem', color: 'rgba(45, 37, 32, 0.72)' }}>
         Toggle with Ctrl + ` | archisvaze/liquid-glass parity
       </p>
+
+      <div style={{ marginBottom: '0.9rem' }}>
+        <div style={{ ...labelRowStyle, marginBottom: '0.45rem' }}>
+          <span>Wallpaper</span>
+          <span>{WALLPAPER_OPTIONS.find((o) => o.key === storeState.wallpaper)?.label}</span>
+        </div>
+        <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap' }}>
+          {WALLPAPER_OPTIONS.map(({ key, label }) => (
+            <button
+              key={key}
+              type="button"
+              style={{
+                ...wallpaperButtonStyle,
+                ...(storeState.wallpaper === key ? wallpaperButtonActiveStyle : {}),
+              }}
+              onClick={() => glassStore.setWallpaper(key)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div style={sectionStyle}>
         {SLIDERS.map(({ key, label, min, max, step, format }) => (

@@ -11,7 +11,7 @@
 
 import { VERTEX_SHADER, FRAGMENT_SHADER, MAX_REGIONS } from './shaders';
 import { getRegions } from './glassRegistry';
-import { glassStore } from './glassStore';
+import { glassStore, type WallpaperPreset } from './glassStore';
 
 /* ── Helpers ─────────────────────────────────────────────── */
 
@@ -94,11 +94,16 @@ function renderGradientBackground(canvas: HTMLCanvasElement, w: number, h: numbe
   ctx.fillRect(0, 0, w, h);
 }
 
-/* ── Background wallpaper URL ────────────────────────────── */
+/* ── Wallpaper presets ────────────────────────────────────── */
 
-// Default: archisvaze reference wallpaper (rich interior photo shows refraction well)
-const WALLPAPER_URL =
-  'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop';
+const WALLPAPER_URLS: Record<string, string> = {
+  // archisvaze reference: rich interior photo, shows refraction clearly
+  reference:
+    'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop',
+  // high-contrast editorial: dark/light extremes stress-test the glass
+  editorial:
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2000&auto=format&fit=crop',
+};
 
 /* ── Public entry point ──────────────────────────────────── */
 
@@ -183,43 +188,73 @@ export function createGlassRenderer(canvas: HTMLCanvasElement): () => void {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-  let bgAspect = 1.5; // default until image loads
+  let bgAspect = 1.5;
+  const generatedCanvas = document.createElement('canvas');
+  let activeWallpaper: WallpaperPreset | null = null;
 
-  // Start with gradient fallback, then load real wallpaper
-  const fallbackCanvas = document.createElement('canvas');
-
-  function uploadFallback(w: number, h: number): void {
-    renderGradientBackground(fallbackCanvas, w, h);
+  function uploadCanvasBackground(renderFn: (c: HTMLCanvasElement, w: number, h: number) => void): void {
+    const w = canvas.width || 1920;
+    const h = canvas.height || 1080;
+    renderFn(generatedCanvas, w, h);
     bgAspect = w / h;
     gl.bindTexture(gl.TEXTURE_2D, bgTex);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, fallbackCanvas);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, generatedCanvas);
   }
 
-  // Load real wallpaper image
-  const wallpaperImg = new Image();
-  wallpaperImg.crossOrigin = 'anonymous';
-  let wallpaperLoaded = false;
+  function loadImageWallpaper(url: string): void {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      bgAspect = img.width / img.height;
+      gl.bindTexture(gl.TEXTURE_2D, bgTex);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+      // Sync DOM background
+      const bgEl = document.getElementById('site-shell-bg');
+      if (bgEl) {
+        bgEl.style.background = `url('${url}') center/cover no-repeat`;
+      }
+    };
+    img.onerror = () => {
+      console.warn(`[LiquidGlass] Failed to load wallpaper: ${url}, falling back to gradient`);
+      uploadCanvasBackground(renderGradientBackground);
+    };
+    img.src = url;
+  }
 
-  wallpaperImg.onload = () => {
-    wallpaperLoaded = true;
-    bgAspect = wallpaperImg.width / wallpaperImg.height;
-    gl.bindTexture(gl.TEXTURE_2D, bgTex);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, wallpaperImg);
-
-    // Also set the DOM background to match
+  function applyWallpaper(preset: WallpaperPreset): void {
+    activeWallpaper = preset;
     const bgEl = document.getElementById('site-shell-bg');
-    if (bgEl) {
-      bgEl.style.background = `url('${WALLPAPER_URL}') center/cover no-repeat`;
+
+    switch (preset) {
+      case 'diagnostic':
+        uploadCanvasBackground(renderDiagnosticBackground);
+        if (bgEl) {
+          // Match diagnostic colors in DOM background
+          bgEl.style.background =
+            'linear-gradient(to right, #c44d3f 50%, #d4a040 50%) top/100% 50% no-repeat, ' +
+            'linear-gradient(to right, #3a8a7a 50%, #2d4a8a 50%) bottom/100% 50% no-repeat';
+        }
+        break;
+      case 'gradient':
+        uploadCanvasBackground(renderGradientBackground);
+        if (bgEl) {
+          bgEl.style.background =
+            'radial-gradient(circle at 14% 16%, rgba(255,245,235,0.95), rgba(248,232,216,0.88) 42%, transparent 70%), ' +
+            'radial-gradient(circle at 85% 80%, rgba(228,180,140,0.7), transparent 46%), ' +
+            'linear-gradient(145deg, #f5e6d3 0%, #e8d5c4 35%, #d4a574 65%, #c4956a 100%)';
+        }
+        break;
+      case 'reference':
+      case 'editorial':
+        loadImageWallpaper(WALLPAPER_URLS[preset]);
+        break;
     }
-  };
+  }
 
-  wallpaperImg.onerror = () => {
-    console.warn('[LiquidGlass] Failed to load wallpaper, using gradient fallback');
-  };
-
-  wallpaperImg.src = WALLPAPER_URL;
+  // Load initial wallpaper
+  applyWallpaper(glassStore.getState().wallpaper);
 
   /* ── Resize ──────────────────────────────────────────── */
 
@@ -231,8 +266,9 @@ export function createGlassRenderer(canvas: HTMLCanvasElement): () => void {
     canvas.width = w;
     canvas.height = h;
     gl.viewport(0, 0, w, h);
-    if (!wallpaperLoaded) {
-      uploadFallback(w, h);
+    // Re-upload generated backgrounds on resize (image-based ones scale via aspect ratio)
+    if (activeWallpaper === 'gradient' || activeWallpaper === 'diagnostic') {
+      applyWallpaper(activeWallpaper);
     }
     return true;
   }
@@ -246,6 +282,12 @@ export function createGlassRenderer(canvas: HTMLCanvasElement): () => void {
     if (!running) return;
 
     resize();
+
+    // Live wallpaper switching — check store each frame
+    const currentWallpaper = glassStore.getState().wallpaper;
+    if (currentWallpaper !== activeWallpaper) {
+      applyWallpaper(currentWallpaper);
+    }
 
     const regions = getRegions();
     const count = Math.min(regions.length, MAX_REGIONS);
