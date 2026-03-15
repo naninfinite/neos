@@ -11,6 +11,7 @@
     "test:visual": "npm run build && playwright test",
     "timeline:capture:stage-1a": "node scripts/timeline/capture-stage-1a.mjs",
     "timeline:capture:site-shell-01": "node scripts/timeline/capture-site-shell-01.mjs",
+    "timeline:capture:site-shell-02": "node scripts/timeline/capture-site-shell-02.mjs",
     "timeline:pdf": "node scripts/timeline/export-timeline-pdf.mjs"
   },
   "dependencies": {

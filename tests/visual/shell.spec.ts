@@ -1,49 +1,38 @@
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test';
 
-// IMPORTANT: This test was written for the Stage 1A channel navigation architecture.
-// It is currently FAILING because the site root is the SHELL-01A OS desktop (being re-scoped).
-// Direction: this test is roughly aligned with the new SITE-SHELL direction (liquid glass
-// channel surface with ME.EXE as OS channel) but the specific selectors will need updating
-// once SITE-SHELL-01 is implemented.
-// DO NOT delete this test — use it as the basis for the new SITE-SHELL integration test.
-// Owner: update after SITE-SHELL-01 milestone is complete.
+test('site shell renders hero and stack navigation for isolated channels', async ({ page }) => {
+  await page.goto('/');
 
-test('site shell renders with channel navigation', async ({ page }) => {
-    await page.goto('/');
+  await expect(page.getByText('Preparing light glass shell and channel navigation.')).toBeHidden({
+    timeout: 5_000,
+  });
 
-    await expect(page.getByLabel('Boot overlay')).toBeVisible();
-    await expect(page.getByLabel('Boot overlay')).toBeHidden({ timeout: 5000 });
+  const channelNav = page.getByLabel('Channel navigation');
 
-    // Channel bar is visible with navigation
-    await expect(page.getByLabel('Site navigation')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'NEOS' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Switch Channels' })).toBeVisible();
-    await expect(page.getByLabel('Channel switcher')).toHaveCount(0);
+  await expect(page.getByLabel('Site shell')).toBeVisible();
+  await expect(channelNav).toBeVisible();
+  await expect(channelNav.getByRole('button', { name: 'HOME', exact: true })).toBeVisible();
+  await expect(channelNav.getByRole('button', { name: 'ME.EXE', exact: true })).toBeVisible();
+  await expect(channelNav.getByRole('button', { name: 'YOU.EXE', exact: true })).toBeVisible();
+  await expect(channelNav.getByRole('button', { name: 'THIRD.EXE', exact: true })).toBeVisible();
 
-    // Home channel shows panels
-    await expect(page.getByLabel('Home')).toBeVisible();
-    await expect(page.getByLabel('ME.EXE preview')).toBeVisible();
-    await expect(page.getByLabel('YOU.EXE preview')).toBeVisible();
-    await expect(page.getByLabel('THIRD.EXE preview')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Liquid Glass Channel Surface' })).toBeVisible();
+  await expect(page.getByText('Featured channel')).toBeVisible();
+  await expect(page.getByText('Channel stack')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'ME.EXE' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Rotate stack' })).toBeVisible();
 
-    // Navigate to ME channel from home surface — taskbar appears here only
-    await page
-      .getByLabel('ME.EXE preview')
-      .getByRole('button', { name: 'Open ME.EXE' })
-      .click();
-    await expect(page.getByLabel('ME.EXE')).toBeVisible();
-    await expect(page.getByLabel('Taskbar')).toBeVisible();
-    await expect(page.getByLabel('System clock')).toContainText(/\d{2}:\d{2}/);
+  await page.getByRole('button', { name: 'Rotate stack' }).click();
+  await expect(page.getByRole('heading', { name: 'YOU.EXE' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Enter YOU.EXE' })).toBeVisible();
 
-    // Quick switch is secondary navigation and can route to YOU
-    await page.getByRole('button', { name: 'Switch Channels' }).click();
-    await expect(page.getByLabel('Channel switcher')).toBeVisible();
-    await page.getByRole('button', { name: /YOU\.EXE/i }).click();
-    await expect(page.getByLabel('YOU.EXE')).toBeVisible();
-    await expect(page.getByLabel('Taskbar')).toBeHidden();
+  await page.getByRole('button', { name: 'Enter YOU.EXE' }).click();
+  await expect(page.getByRole('heading', { name: 'YOU.EXE placeholder' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Back to HOME' })).toBeVisible();
+  await expect(page.getByText('No desktop at site root')).toBeVisible();
 
-    // Navigate back to home
-    await page.getByRole('button', { name: 'NEOS' }).click();
-    await expect(page.getByLabel('Home')).toBeVisible();
-    await expect(page.getByLabel('Taskbar')).toBeHidden();
+  await page.getByRole('button', { name: 'Back to HOME' }).click();
+  await expect(page.getByRole('heading', { name: 'Liquid Glass Channel Surface' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'YOU.EXE' })).toBeVisible();
+  await expect(page.getByText('Active: HOME').first()).toBeVisible();
 });
