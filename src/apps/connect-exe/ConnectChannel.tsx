@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import type { ReactElement } from 'react';
 import { connectRuntimeStore, ROOM_PHASES, useConnectRuntimeState } from './runtime/store';
 import { ConnectScene } from './scene/ConnectScene';
+import { BearingDisc } from './scene/BearingDisc';
 
 function formatSeconds(totalSeconds: number): string {
   const minutes = Math.floor(totalSeconds / 60)
@@ -15,8 +16,9 @@ function formatSeconds(totalSeconds: number): string {
 
 export function ConnectChannel(): ReactElement {
   const runtime = useConnectRuntimeState();
-  const { room, timer, players, world, network } = runtime;
+  const { room, timer, players, network } = runtime;
   const remainingSeconds = Math.max(0, timer.countdownSeconds - timer.elapsedSeconds);
+  const localPlayer = players.local;
 
   useEffect(() => {
     connectRuntimeStore.setConnectionStatus('local_mock');
@@ -39,13 +41,30 @@ export function ConnectChannel(): ReactElement {
       <article className="connectRuntimeWindow">
         <header className="connectRuntimeTitlebar">
           <p className="connectRuntimeTitle">CONNECT.EXE</p>
-          <p className="connectRuntimeMeta">M0 runtime foundation</p>
+          <p className="connectRuntimeMeta">M1 navigation shell</p>
         </header>
 
         <div className="connectRuntimeBody">
           <div className="connectScenePane">
             <div className="connectSceneFrame">
               <ConnectScene />
+              {/* HUD overlay */}
+              <div className="connectHud">
+                <BearingDisc />
+                <div className="connectHudTimer">
+                  {formatSeconds(remainingSeconds)}
+                </div>
+                {localPlayer.isMapOpen && (
+                  <div className="connectMapOverlay">
+                    <p className="connectMapTitle">MAP — press M to close</p>
+                    <p className="connectMapHint">Traversal frozen while map is open</p>
+                  </div>
+                )}
+                {localPlayer.stamina.isExhausted && (
+                  <div className="connectHudExhausted">EXHAUSTED</div>
+                )}
+                <div className="connectHudCrosshair" />
+              </div>
             </div>
           </div>
 
@@ -67,7 +86,7 @@ export function ConnectChannel(): ReactElement {
             </section>
 
             <section className="connectInspectorSection">
-              <p className="connectInspectorTitle">Timer Scaffold</p>
+              <p className="connectInspectorTitle">Timer</p>
               <div className="connectControlRow">
                 <button type="button" onClick={() => connectRuntimeStore.startRun()}>
                   Start Run
@@ -100,23 +119,29 @@ export function ConnectChannel(): ReactElement {
                   -30s
                 </button>
                 <button type="button" onClick={() => connectRuntimeStore.reset()}>
-                  Reset Runtime
+                  Reset
                 </button>
               </div>
             </section>
 
             <section className="connectInspectorSection">
-              <p className="connectInspectorTitle">Local Map Freeze Scaffold</p>
-              <div className="connectControlRow">
-                <button
-                  type="button"
-                  onClick={() =>
-                    connectRuntimeStore.setMapOpen('local', !players.local.isMapOpen)
-                  }
-                >
-                  {players.local.isMapOpen ? 'Close Map' : 'Open Map'}
-                </button>
-              </div>
+              <p className="connectInspectorTitle">Movement</p>
+              <dl className="connectStatGrid">
+                <dt>Stamina</dt>
+                <dd>{Math.round(localPlayer.stamina.current)} / {localPlayer.stamina.max}</dd>
+                <dt>Sprinting</dt>
+                <dd>{localPlayer.movement.isSprinting ? 'yes' : 'no'}</dd>
+                <dt>Grounded</dt>
+                <dd>{localPlayer.movement.isGrounded ? 'yes' : 'no'}</dd>
+                <dt>Jump Chain</dt>
+                <dd>{localPlayer.stamina.jumpChainCount}</dd>
+                <dt>Exhausted</dt>
+                <dd>{localPlayer.stamina.isExhausted ? 'YES' : 'no'}</dd>
+                <dt>Map Open</dt>
+                <dd>{localPlayer.isMapOpen ? 'yes (frozen)' : 'no'}</dd>
+                <dt>District</dt>
+                <dd>{localPlayer.currentDistrictId ?? '—'}</dd>
+              </dl>
             </section>
 
             <section className="connectInspectorSection">
@@ -128,29 +153,31 @@ export function ConnectChannel(): ReactElement {
                 <dd>{room.phase}</dd>
                 <dt>Connection</dt>
                 <dd>{room.connectionStatus}</dd>
-                <dt>Host</dt>
-                <dd>{room.hostPlayerId}</dd>
                 <dt>Time Left</dt>
                 <dd>{formatSeconds(remainingSeconds)}</dd>
                 <dt>Elapsed</dt>
                 <dd>{formatSeconds(timer.elapsedSeconds)}</dd>
-                <dt>Local Placeholder</dt>
-                <dd>{players.local.playerId}</dd>
-                <dt>Remote Placeholder</dt>
-                <dd>{players.remote.playerId}</dd>
-                <dt>Local Movement</dt>
-                <dd>{players.local.isMovementFrozen ? 'frozen (map open)' : 'enabled'}</dd>
-                <dt>Scene</dt>
-                <dd>{world.sceneId}</dd>
+                <dt>Position</dt>
+                <dd>
+                  {localPlayer.transform.position.map((v) => v.toFixed(1)).join(', ')}
+                </dd>
+                <dt>Heading</dt>
+                <dd>{((localPlayer.transform.headingRadians * 180) / Math.PI).toFixed(0)}°</dd>
               </dl>
             </section>
 
             <section className="connectInspectorSection">
-              <p className="connectInspectorTitle">Authority Scaffold</p>
+              <p className="connectInspectorTitle">Authority</p>
               <p className="connectAssumption">
-                Shared-state authority is explicit and host-owned:{' '}
-                <strong>{network.authorityModel}</strong>. Transport remains{' '}
-                <strong>{network.transport}</strong> pending OPEN_QUESTIONS lock.
+                Model: <strong>{network.authorityModel}</strong> | Transport:{' '}
+                <strong>{network.transport}</strong>
+              </p>
+            </section>
+
+            <section className="connectInspectorSection">
+              <p className="connectInspectorTitle">Controls</p>
+              <p className="connectAssumption">
+                Click scene to lock pointer. WASD = move, Shift = sprint, Space = jump, M = map
               </p>
             </section>
           </aside>

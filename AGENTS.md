@@ -50,8 +50,21 @@ Wire the existing `src/desktop/` OS shell code into ME.EXE.
 Isolated channel runtimes for YOU.EXE and THIRD.EXE.
 Not started.
 
-### CONNECT-IMPLEMENTATION (frozen)
-Do not implement. Frozen per D-16.
+### CONNECT-IMPLEMENTATION (active — M1)
+Unfrozen by user directive (2026-03-15). Implementing M1 — Navigation and movement shell.
+
+**Completed:**
+- M0: Runtime foundation — app shell, store, timer, phases, scene bootstrap, player placeholders
+- M1: First-person controller (WASD + pointer lock), walk/sprint/jump, stamina/exertion with repeated-jump penalty, map-open input-context freeze, Bearing Disc compass, greybox Entry Garden + Red Arch + Dry Fountain approach, landmark registry
+
+**Active:**
+- Connect.EXE mounts as a channel in the site shell
+- First-person controller with pointer lock, WASD movement, sprint (Shift), jump (Space)
+- Stamina system with escalating repeated-jump cost
+- Map toggle (M key) freezes all movement/sprint/jump/interact
+- Greybox districts: Entry Garden, Red Arch, Dry Fountain approach
+- Landmark registry with metadata-driven markers
+- Bearing Disc always-on heading aid
 
 ### SHELL-DESKTOP (retired as a site-wide lane)
 This lane was building the OS desktop as a site-wide shell. That direction is superseded by D-20.

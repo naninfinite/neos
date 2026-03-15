@@ -873,3 +873,276 @@ input {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* ── CONNECT.EXE ──────────────────────────────────────── */
+
+.connectChannel {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.connectRuntimeWindow {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1a1e2e;
+  color: #d0d8e0;
+}
+
+.connectRuntimeTitlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  padding: 0 var(--space-3);
+  background: rgba(20, 24, 40, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.connectRuntimeTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #e0e8f0;
+}
+
+.connectRuntimeMeta {
+  margin: 0;
+  font-size: 0.68rem;
+  color: rgba(200, 210, 220, 0.5);
+  letter-spacing: 0.06em;
+}
+
+.connectRuntimeBody {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.connectScenePane {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.connectSceneFrame {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.connectSceneFrame canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ── Connect HUD overlay ── */
+
+.connectHud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.connectHudTimer {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.connectHudCrosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.connectHudExhausted {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  letter-spacing: 0.15em;
+  color: #ef4444;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+  animation: connectExhaustedPulse 1s ease-in-out infinite;
+}
+
+@keyframes connectExhaustedPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.connectMapOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  background: rgba(10, 15, 30, 0.75);
+  pointer-events: auto;
+}
+
+.connectMapTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #e0e8f0;
+}
+
+.connectMapHint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(200, 210, 220, 0.6);
+}
+
+/* ── Bearing Disc ── */
+
+.bearingDisc {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 72px;
+  height: 72px;
+}
+
+.bearingDiscPointer {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  width: 2px;
+  height: 10px;
+  margin-left: -1px;
+  background: #ef4444;
+}
+
+/* ── Connect Inspector ── */
+
+.connectInspectorPane {
+  width: 260px;
+  overflow-y: auto;
+  padding: var(--space-3);
+  background: rgba(16, 20, 34, 0.95);
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  font-size: 0.75rem;
+}
+
+.connectInspectorSection {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.connectInspectorTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(200, 210, 220, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 2px;
+}
+
+.connectPhaseGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.connectPhaseButton {
+  padding: 2px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(200, 210, 220, 0.6);
+  font-size: 0.66rem;
+  cursor: pointer;
+}
+
+.connectPhaseButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.connectPhaseButtonActive {
+  background: rgba(0, 200, 120, 0.15);
+  border-color: rgba(0, 200, 120, 0.3);
+  color: #4ade80;
+}
+
+.connectControlRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.connectControlRow button {
+  padding: 2px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(200, 210, 220, 0.7);
+  font-size: 0.66rem;
+  cursor: pointer;
+}
+
+.connectControlRow button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.connectStatGrid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 8px;
+  margin: 0;
+  font-size: 0.7rem;
+}
+
+.connectStatGrid dt {
+  color: rgba(200, 210, 220, 0.5);
+}
+
+.connectStatGrid dd {
+  margin: 0;
+  color: #c8d8e0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+}
+
+.connectAssumption {
+  margin: 0;
+  color: rgba(200, 210, 220, 0.5);
+  font-size: 0.66rem;
+  line-height: 1.4;
+}
+
+.connectAssumption strong {
+  color: rgba(200, 210, 220, 0.7);
+}

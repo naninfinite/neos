@@ -2,6 +2,7 @@ import { useRef, type CSSProperties, type JSX } from 'react';
 import { ChannelSurface } from './ChannelSurface';
 import { SiteBootOverlay } from './SiteBootOverlay';
 import { GlassCanvas } from './glass/GlassCanvas';
+import { GlassTuningPanel } from './glass/GlassTuningPanel';
 import { useGlassRegion } from './glass/useGlassRegion';
 import { type SiteChannel, useSiteStore } from './siteStore';
 
@@ -79,9 +80,10 @@ const CHANNEL_LABELS: Record<Exclude<SiteChannel, null>, string> = {
   me: 'ME.EXE',
   you: 'YOU.EXE',
   third: 'THIRD.EXE',
+  connect: 'CONNECT.EXE',
 };
 
-const NAV_CHANNELS: Exclude<SiteChannel, null>[] = ['home', 'me', 'you', 'third'];
+const NAV_CHANNELS: Exclude<SiteChannel, null>[] = ['home', 'me', 'you', 'third', 'connect'];
 
 export function SiteShell(): JSX.Element {
   const bootComplete = useSiteStore((store) => store.bootComplete);
@@ -97,6 +99,7 @@ export function SiteShell(): JSX.Element {
   return (
     <main aria-label="Site shell" style={shellStyle}>
       <GlassCanvas />
+      <GlassTuningPanel />
 
       <header ref={headerRef} style={topBarStyle}>
         <p style={brandStyle}>NEOS</p>

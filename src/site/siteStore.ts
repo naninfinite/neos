@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
 
-export type SiteChannel = 'home' | 'me' | 'you' | 'third' | null;
+export type SiteChannel = 'home' | 'me' | 'you' | 'third' | 'connect' | null;
 
 export interface SiteStoreState {
   bootComplete: boolean;

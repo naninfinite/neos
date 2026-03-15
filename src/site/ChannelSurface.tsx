@@ -1,4 +1,5 @@
-import { useRef, type CSSProperties, type JSX } from 'react';
+import { useRef, useState, type CSSProperties, type JSX } from 'react';
+import { ConnectChannel } from '../apps/connect-exe/ConnectChannel';
 import { useGlassRegion } from './glass/useGlassRegion';
 import type { SiteChannel } from './siteStore';
 
@@ -11,7 +12,10 @@ interface ChannelCard {
   id: Exclude<SiteChannel, null | 'home'>;
   name: string;
   subtitle: string;
+  summary: string;
   detail: string;
+  status: string;
+  note: string;
 }
 
 const CHANNELS: ChannelCard[] = [
@@ -19,19 +23,31 @@ const CHANNELS: ChannelCard[] = [
     id: 'me',
     name: 'ME.EXE',
     subtitle: 'OS channel',
-    detail: 'Desktop/windowing runtime lives here in Phase 2.',
+    summary: 'Desktop shell, apps, and the full operating-system metaphor live here.',
+    detail:
+      'Phase 2 mounts the preserved desktop/windowing code inside this channel only. The site shell remains a lightweight entry surface.',
+    status: 'Phase 2 target',
+    note: 'Windowing, taskbar, launcher, VFS, and system apps stay isolated until explicit entry.',
   },
   {
     id: 'you',
     name: 'YOU.EXE',
     subtitle: 'Social channel',
-    detail: 'Isolated communication surface placeholder.',
+    summary: 'Message-board and communication surface reserved for its own runtime.',
+    detail:
+      'The site root can preview this channel, but no social runtime mounts here. The channel will own its own boot, state, and interaction model.',
+    status: 'Phase 3 frozen',
+    note: 'No shared state crosses from the site shell into the future YOU.EXE runtime.',
   },
   {
     id: 'third',
     name: 'THIRD.EXE',
     subtitle: '3D channel',
-    detail: 'Isolated world-building surface placeholder.',
+    summary: 'World-building and spatial experiments remain isolated behind explicit entry.',
+    detail:
+      'Heavy rendering work belongs to THIRD.EXE itself, not to the site root. The home surface only advertises the direction and keeps the shell lightweight.',
+    status: 'Phase 3 frozen',
+    note: 'WebGL at site level stays limited to the background glass renderer and never boots a full channel runtime.',
   },
 ];
 
@@ -41,122 +57,248 @@ const viewportStyle: CSSProperties = {
   flex: 1,
   minHeight: 0,
   border: '1px solid rgba(255, 255, 255, 0.72)',
-  borderRadius: '18px',
+  borderRadius: '24px',
   background: 'rgba(255, 255, 255, 0.06)',
-  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.7), 0 12px 36px rgba(120, 90, 60, 0.18)',
+  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.7), 0 18px 40px rgba(120, 90, 60, 0.18)',
   padding: '1rem',
   display: 'grid',
   alignContent: 'start',
-  gap: '0.9rem',
+  gap: '1rem',
 };
 
-const heroStyle: CSSProperties = {
-  border: '1px solid rgba(255, 255, 255, 0.68)',
-  borderRadius: '14px',
-  background: 'rgba(255, 255, 255, 0.06)',
-  padding: '0.95rem',
+const introStyle: CSSProperties = {
+  border: '1px solid rgba(255, 255, 255, 0.66)',
+  borderRadius: '18px',
+  background: 'rgba(255, 255, 255, 0.08)',
+  padding: '1rem 1.05rem',
 };
 
-const heroKickerStyle: CSSProperties = {
+const introKickerStyle: CSSProperties = {
   margin: 0,
   fontSize: '0.74rem',
-  letterSpacing: '0.1em',
+  letterSpacing: '0.12em',
   textTransform: 'uppercase',
   color: 'rgba(45, 37, 32, 0.7)',
 };
 
-const heroTitleStyle: CSSProperties = {
+const introTitleStyle: CSSProperties = {
   margin: '0.35rem 0 0',
-  fontSize: '1.45rem',
-  lineHeight: 1.08,
+  fontSize: 'clamp(1.55rem, 4vw, 2.6rem)',
+  lineHeight: 1.02,
   color: '#2d2520',
+  maxWidth: '12ch',
 };
 
-const heroCopyStyle: CSSProperties = {
-  margin: '0.62rem 0 0',
+const introCopyStyle: CSSProperties = {
+  margin: '0.72rem 0 0',
   maxWidth: '72ch',
   color: 'rgba(45, 37, 32, 0.82)',
 };
 
-const channelGridStyle: CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-  gap: '0.75rem',
+const introMetaStyle: CSSProperties = {
+  margin: '0.85rem 0 0',
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '0.45rem',
 };
 
-const cardStyle: CSSProperties = {
-  borderRadius: '12px',
-  border: '1px solid rgba(255, 255, 255, 0.65)',
-  background: 'rgba(255, 255, 255, 0.06)',
-  padding: '0.8rem',
-  textAlign: 'left',
-};
-
-const cardNameStyle: CSSProperties = {
-  margin: 0,
-  fontSize: '0.94rem',
-  fontWeight: 700,
+const introBadgeStyle: CSSProperties = {
+  borderRadius: '999px',
+  border: '1px solid rgba(255,255,255,0.55)',
+  background: 'rgba(255,255,255,0.16)',
+  padding: '0.32rem 0.56rem',
+  fontSize: '0.72rem',
   letterSpacing: '0.05em',
+  textTransform: 'uppercase',
   color: '#2d2520',
 };
 
-const cardSubStyle: CSSProperties = {
-  margin: '0.2rem 0 0',
+const homeLayoutStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '1rem',
+  alignItems: 'stretch',
+};
+
+const heroCardStyle: CSSProperties = {
+  flex: '1 1 42rem',
+  borderRadius: '22px',
+  border: '1px solid rgba(255,255,255,0.68)',
+  background: 'rgba(255, 255, 255, 0.08)',
+  padding: '1.1rem',
+  display: 'grid',
+  gap: '1rem',
+  minHeight: '25rem',
+};
+
+const heroHeaderStyle: CSSProperties = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: '0.9rem',
+  alignItems: 'flex-start',
+  flexWrap: 'wrap',
+};
+
+const heroEyebrowStyle: CSSProperties = {
+  margin: 0,
+  fontSize: '0.76rem',
+  textTransform: 'uppercase',
+  letterSpacing: '0.12em',
+  color: 'rgba(45, 37, 32, 0.68)',
+};
+
+const heroNameStyle: CSSProperties = {
+  margin: '0.4rem 0 0',
+  fontSize: 'clamp(1.7rem, 4.5vw, 3.4rem)',
+  lineHeight: 0.95,
+  color: '#2d2520',
+};
+
+const heroSubStyle: CSSProperties = {
+  margin: '0.4rem 0 0',
+  fontSize: '0.82rem',
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase',
+  color: 'rgba(45, 37, 32, 0.72)',
+};
+
+const heroSummaryStyle: CSSProperties = {
+  margin: 0,
+  fontSize: 'clamp(1.1rem, 2.4vw, 1.45rem)',
+  lineHeight: 1.2,
+  color: '#2d2520',
+  maxWidth: '30rem',
+};
+
+const heroDetailStyle: CSSProperties = {
+  margin: 0,
+  color: 'rgba(45, 37, 32, 0.82)',
+  maxWidth: '38rem',
+};
+
+const heroFooterStyle: CSSProperties = {
+  display: 'grid',
+  gap: '0.9rem',
+  marginTop: 'auto',
+};
+
+const heroStatusRowStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '0.55rem',
+};
+
+const heroStatusChipStyle: CSSProperties = {
+  borderRadius: '999px',
+  border: '1px solid rgba(255,255,255,0.58)',
+  background: 'rgba(255,255,255,0.18)',
+  padding: '0.38rem 0.7rem',
+  fontSize: '0.74rem',
+  color: '#2d2520',
+};
+
+const heroActionRowStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '0.65rem',
+};
+
+const primaryButtonStyle: CSSProperties = {
+  borderRadius: '999px',
+  border: '1px solid rgba(255,255,255,0.62)',
+  background: 'rgba(255,255,255,0.18)',
+  backdropFilter: 'blur(12px)',
+  padding: '0.58rem 0.92rem',
+  fontSize: '0.76rem',
+  fontWeight: 700,
+  letterSpacing: '0.05em',
+  textTransform: 'uppercase',
+  color: '#2d2520',
+  cursor: 'pointer',
+};
+
+const secondaryButtonStyle: CSSProperties = {
+  ...primaryButtonStyle,
+  background: 'rgba(255,255,255,0.1)',
+  fontWeight: 600,
+};
+
+const stackStyle: CSSProperties = {
+  flex: '1 1 18rem',
+  display: 'grid',
+  gap: '0.82rem',
+};
+
+const stackIntroStyle: CSSProperties = {
+  borderRadius: '18px',
+  border: '1px solid rgba(255,255,255,0.62)',
+  background: 'rgba(255,255,255,0.08)',
+  padding: '0.95rem',
+  color: 'rgba(45, 37, 32, 0.82)',
+};
+
+const stackCardStyle: CSSProperties = {
+  borderRadius: '18px',
+  border: '1px solid rgba(255,255,255,0.62)',
+  background: 'rgba(255,255,255,0.08)',
+  padding: '0.95rem',
+  display: 'grid',
+  gap: '0.72rem',
+  textAlign: 'left',
+};
+
+const stackCardActiveStyle: CSSProperties = {
+  borderColor: 'rgba(255,255,255,0.84)',
+  background: 'rgba(255,255,255,0.16)',
+};
+
+const stackCardTitleStyle: CSSProperties = {
+  margin: 0,
+  fontSize: '1rem',
+  fontWeight: 700,
+  color: '#2d2520',
+};
+
+const stackCardSubStyle: CSSProperties = {
+  margin: '0.18rem 0 0',
   fontSize: '0.72rem',
   textTransform: 'uppercase',
   letterSpacing: '0.08em',
   color: 'rgba(45, 37, 32, 0.66)',
 };
 
-const cardDetailStyle: CSSProperties = {
-  margin: '0.56rem 0 0',
-  fontSize: '0.82rem',
+const stackCardCopyStyle: CSSProperties = {
+  margin: 0,
+  fontSize: '0.84rem',
   color: 'rgba(45, 37, 32, 0.8)',
 };
 
-const cardButtonStyle: CSSProperties = {
-  marginTop: '0.65rem',
-  borderRadius: '8px',
-  border: '1px solid rgba(255,255,255,0.5)',
-  background: 'rgba(255,255,255,0.12)',
-  backdropFilter: 'blur(12px)',
-  padding: '0.36rem 0.56rem',
-  fontSize: '0.73rem',
-  fontWeight: 600,
-  color: '#2d2520',
-  cursor: 'pointer',
+const stackCardActionRowStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: '0.55rem',
 };
 
 const placeholderStyle: CSSProperties = {
-  borderRadius: '12px',
-  border: '1px dashed rgba(120, 90, 60, 0.35)',
+  borderRadius: '20px',
+  border: '1px solid rgba(255,255,255,0.66)',
   background: 'rgba(255,255,255,0.08)',
-  padding: '0.95rem',
+  padding: '1.1rem',
+  display: 'grid',
+  gap: '0.75rem',
 };
 
 const placeholderTitleStyle: CSSProperties = {
   margin: 0,
-  fontSize: '1.1rem',
-  letterSpacing: '0.04em',
+  fontSize: 'clamp(1.4rem, 3vw, 2.1rem)',
+  lineHeight: 1.05,
   color: '#2d2520',
 };
 
 const placeholderCopyStyle: CSSProperties = {
-  margin: '0.45rem 0 0',
-  color: 'rgba(45, 37, 32, 0.8)',
-};
-
-const backButtonStyle: CSSProperties = {
-  marginTop: '0.7rem',
-  borderRadius: '8px',
-  border: '1px solid rgba(255,255,255,0.5)',
-  background: 'rgba(255,255,255,0.12)',
-  backdropFilter: 'blur(12px)',
-  padding: '0.36rem 0.58rem',
-  fontSize: '0.73rem',
-  fontWeight: 600,
-  color: '#2d2520',
-  cursor: 'pointer',
+  margin: 0,
+  maxWidth: '44rem',
+  color: 'rgba(45, 37, 32, 0.82)',
 };
 
 const LABEL_BY_CHANNEL: Record<Exclude<SiteChannel, null>, string> = {
@@ -164,66 +306,193 @@ const LABEL_BY_CHANNEL: Record<Exclude<SiteChannel, null>, string> = {
   me: 'ME.EXE',
   you: 'YOU.EXE',
   third: 'THIRD.EXE',
+  connect: 'CONNECT.EXE',
 };
 
-/** Wrapper that registers its own glass region. */
 function GlassCard({
   channel,
-  onSelect,
+  isFeatured,
+  onPromote,
+  onEnter,
 }: {
   channel: ChannelCard;
-  onSelect: (id: ChannelCard['id']) => void;
+  isFeatured: boolean;
+  onPromote: (id: ChannelCard['id']) => void;
+  onEnter: (id: ChannelCard['id']) => void;
 }): JSX.Element {
   const ref = useRef<HTMLElement>(null);
-  useGlassRegion(ref, { radius: 12 });
+  useGlassRegion(ref, { radius: 18 });
 
   return (
-    <article ref={ref} style={cardStyle}>
-      <p style={cardNameStyle}>{channel.name}</p>
-      <p style={cardSubStyle}>{channel.subtitle}</p>
-      <p style={cardDetailStyle}>{channel.detail}</p>
-      <button type="button" style={cardButtonStyle} onClick={() => onSelect(channel.id)}>
-        Enter {channel.name}
-      </button>
+    <article ref={ref} style={{ ...stackCardStyle, ...(isFeatured ? stackCardActiveStyle : {}) }}>
+      <div>
+        <p style={stackCardTitleStyle}>{channel.name}</p>
+        <p style={stackCardSubStyle}>{channel.subtitle}</p>
+      </div>
+      <p style={stackCardCopyStyle}>{channel.summary}</p>
+      <div style={stackCardActionRowStyle}>
+        <button type="button" style={secondaryButtonStyle} onClick={() => onPromote(channel.id)}>
+          {isFeatured ? 'Featured' : 'Promote'}
+        </button>
+        <button type="button" style={primaryButtonStyle} onClick={() => onEnter(channel.id)}>
+          Enter
+        </button>
+      </div>
     </article>
   );
 }
 
+function ChannelPlaceholder({
+  activeLabel,
+  activeChannel,
+  featuredChannelId,
+  onGoHome,
+  onFeatureChannel,
+}: {
+  activeLabel: string;
+  activeChannel: Exclude<SiteChannel, null | 'home'>;
+  featuredChannelId: ChannelCard['id'];
+  onGoHome: () => void;
+  onFeatureChannel: (id: ChannelCard['id']) => void;
+}): JSX.Element {
+  const ref = useRef<HTMLDivElement>(null);
+  useGlassRegion(ref, { radius: 20 });
+
+  return (
+    <section ref={ref} style={placeholderStyle}>
+      <p style={introKickerStyle}>Channel entry</p>
+      <h2 style={placeholderTitleStyle}>{activeLabel} placeholder</h2>
+      <p style={placeholderCopyStyle}>
+        {activeLabel} is selected, but its live runtime is still isolated from the site root.
+        SITE-SHELL can route into the channel and describe it, but it does not mount the channel
+        internals here.
+      </p>
+      <div style={heroStatusRowStyle}>
+        <span style={heroStatusChipStyle}>No desktop at site root</span>
+        <span style={heroStatusChipStyle}>No shared runtime state</span>
+        <span style={heroStatusChipStyle}>Back returns to HOME</span>
+      </div>
+      <div style={heroActionRowStyle}>
+        <button type="button" style={primaryButtonStyle} onClick={onGoHome}>
+          Back to HOME
+        </button>
+        <button
+          type="button"
+          style={secondaryButtonStyle}
+          onClick={() => onFeatureChannel(activeChannel ?? featuredChannelId)}
+        >
+          Feature {activeLabel}
+        </button>
+      </div>
+    </section>
+  );
+}
+
 export function ChannelSurface({ activeChannel, onSelectChannel }: ChannelSurfaceProps): JSX.Element {
-  const activeLabel = activeChannel === null ? 'HOME' : LABEL_BY_CHANNEL[activeChannel];
+  const [featuredChannelId, setFeaturedChannelId] = useState<ChannelCard['id']>('me');
 
   const viewportRef = useRef<HTMLElement>(null);
+  const introRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
-  useGlassRegion(viewportRef, { radius: 18 });
-  useGlassRegion(heroRef, { radius: 14 });
+
+  useGlassRegion(viewportRef, { radius: 24 });
+  useGlassRegion(introRef, { radius: 18 });
+  useGlassRegion(heroRef, { radius: 22 });
+
+  const featuredChannel =
+    CHANNELS.find((channel) => channel.id === featuredChannelId) ?? CHANNELS[0];
+  const stackChannels = CHANNELS.filter((channel) => channel.id !== featuredChannel.id);
+  const activeLabel = activeChannel === null ? 'HOME' : LABEL_BY_CHANNEL[activeChannel];
 
   return (
     <section ref={viewportRef} style={viewportStyle}>
-      <div ref={heroRef} style={heroStyle}>
-        <p style={heroKickerStyle}>Site Shell</p>
-        <h1 style={heroTitleStyle}>Liquid Glass Channel Surface</h1>
-        <p style={heroCopyStyle}>
-          Visitors land on this light glass channel surface first. Channel internals are isolated
-          and mount only after explicit entry. Active channel: {activeLabel}.
+      <div ref={introRef} style={introStyle}>
+        <p style={introKickerStyle}>Site Shell</p>
+        <h1 style={introTitleStyle}>Liquid Glass Channel Surface</h1>
+        <p style={introCopyStyle}>
+          The root experience is a lightweight warm-neutral channel surface. It previews entry
+          points, but channel internals remain isolated and mount only after explicit selection.
         </p>
+        <div style={introMetaStyle}>
+          <span style={introBadgeStyle}>Active: {activeLabel}</span>
+          <span style={introBadgeStyle}>Lane: SITE-SHELL</span>
+          <span style={introBadgeStyle}>Runtime isolation locked</span>
+        </div>
       </div>
 
-      {activeChannel === 'home' || activeChannel === null ? (
-        <div style={channelGridStyle}>
-          {CHANNELS.map((channel) => (
-            <GlassCard key={channel.id} channel={channel} onSelect={onSelectChannel} />
-          ))}
+      {activeChannel === 'connect' ? (
+        <ConnectChannel />
+      ) : activeChannel === 'home' || activeChannel === null ? (
+        <div style={homeLayoutStyle}>
+          <article ref={heroRef} style={heroCardStyle}>
+            <header style={heroHeaderStyle}>
+              <div>
+                <p style={heroEyebrowStyle}>Featured channel</p>
+                <h2 style={heroNameStyle}>{featuredChannel.name}</h2>
+                <p style={heroSubStyle}>{featuredChannel.subtitle}</p>
+              </div>
+              <span style={heroStatusChipStyle}>{featuredChannel.status}</span>
+            </header>
+
+            <div style={{ display: 'grid', gap: '0.72rem' }}>
+              <p style={heroSummaryStyle}>{featuredChannel.summary}</p>
+              <p style={heroDetailStyle}>{featuredChannel.detail}</p>
+            </div>
+
+            <div style={heroFooterStyle}>
+              <div style={heroStatusRowStyle}>
+                <span style={heroStatusChipStyle}>Explicit entry only</span>
+                <span style={heroStatusChipStyle}>No shared channel state</span>
+                <span style={heroStatusChipStyle}>Site-level glass only</span>
+              </div>
+              <p style={{ margin: 0, color: 'rgba(45, 37, 32, 0.76)' }}>{featuredChannel.note}</p>
+              <div style={heroActionRowStyle}>
+                <button
+                  type="button"
+                  style={primaryButtonStyle}
+                  onClick={() => onSelectChannel(featuredChannel.id)}
+                >
+                  Enter {featuredChannel.name}
+                </button>
+                <button
+                  type="button"
+                  style={secondaryButtonStyle}
+                  onClick={() => setFeaturedChannelId(stackChannels[0]?.id ?? featuredChannel.id)}
+                >
+                  Rotate stack
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <div style={stackStyle}>
+            <section style={stackIntroStyle}>
+              <p style={{ ...introKickerStyle, marginBottom: '0.34rem' }}>Channel stack</p>
+              <p style={{ margin: 0 }}>
+                Promote a channel to the hero card or enter it directly. The root remains a routing
+                surface rather than a runtime host.
+              </p>
+            </section>
+
+            {stackChannels.map((channel) => (
+              <GlassCard
+                key={channel.id}
+                channel={channel}
+                isFeatured={false}
+                onPromote={setFeaturedChannelId}
+                onEnter={onSelectChannel}
+              />
+            ))}
+          </div>
         </div>
       ) : (
-        <section style={placeholderStyle}>
-          <h2 style={placeholderTitleStyle}>{activeLabel} placeholder</h2>
-          <p style={placeholderCopyStyle}>
-            Channel runtime remains isolated and is not mounted in SITE-SHELL-01.
-          </p>
-          <button type="button" style={backButtonStyle} onClick={() => onSelectChannel('home')}>
-            Back to HOME
-          </button>
-        </section>
+        <ChannelPlaceholder
+          activeLabel={activeLabel}
+          activeChannel={activeChannel}
+          featuredChannelId={featuredChannel.id}
+          onGoHome={() => onSelectChannel('home')}
+          onFeatureChannel={setFeaturedChannelId}
+        />
       )}
     </section>
   );

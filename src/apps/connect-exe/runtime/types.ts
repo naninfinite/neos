@@ -9,6 +9,23 @@ export type PlayerRole = 'local' | 'remote';
 export interface PlayerTransform {
   position: [number, number, number];
   headingRadians: number;
+  pitchRadians: number;
+}
+
+export interface MovementState {
+  isGrounded: boolean;
+  isSprinting: boolean;
+  isJumping: boolean;
+  velocityY: number;
+}
+
+export interface StaminaState {
+  current: number;
+  max: number;
+  recoveryRate: number;
+  jumpChainCount: number;
+  lastJumpTime: number;
+  isExhausted: boolean;
 }
 
 export interface ConnectPlayerState {
@@ -16,12 +33,23 @@ export interface ConnectPlayerState {
   playerId: string;
   isConnected: boolean;
   transform: PlayerTransform;
-  stamina: number;
+  movement: MovementState;
+  stamina: StaminaState;
   isMapOpen: boolean;
   isMovementFrozen: boolean;
   isSprintEnabled: boolean;
   isJumpEnabled: boolean;
   isInteractEnabled: boolean;
+  currentDistrictId: string | null;
+}
+
+export interface LandmarkEntry {
+  landmarkId: string;
+  label: string;
+  districtId: string;
+  position: [number, number, number];
+  isMapVisible: boolean;
+  isCalloutRelevant: boolean;
 }
 
 export interface ConnectRuntimeState {
@@ -46,6 +74,7 @@ export interface ConnectRuntimeState {
     loaded: boolean;
     mapId: string;
   };
+  landmarks: LandmarkEntry[];
   network: {
     authorityModel: 'host_authoritative';
     transport: 'unresolved';
