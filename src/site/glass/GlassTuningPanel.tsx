@@ -48,8 +48,27 @@ const resetButtonStyle = {
 
 type GlassParamKey = keyof GlassMaterialPreset;
 
+interface SliderConfig {
+  key: GlassParamKey;
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+  format: (v: number) => string;
+}
+
+const SLIDERS: SliderConfig[] = [
+  { key: 'ior', label: 'IOR', min: 1, max: 3, step: 0.01, format: (v) => v.toFixed(2) },
+  { key: 'thickness', label: 'Thickness', min: 0, max: 200, step: 1, format: (v) => v.toFixed(0) },
+  { key: 'blur', label: 'Blur', min: 0, max: 40, step: 0.5, format: (v) => `${v.toFixed(1)} px` },
+  { key: 'bezel', label: 'Bezel', min: 10, max: 100, step: 1, format: (v) => `${v.toFixed(0)} px` },
+  { key: 'specular', label: 'Specular', min: 0, max: 1, step: 0.01, format: (v) => v.toFixed(2) },
+  { key: 'tint', label: 'Tint', min: 0, max: 0.5, step: 0.01, format: (v) => `${(v * 100).toFixed(0)}%` },
+  { key: 'shadow', label: 'Shadow', min: 0, max: 1, step: 0.01, format: (v) => v.toFixed(2) },
+];
+
 export function GlassTuningPanel(): JSX.Element | null {
-  const { visible, ior, thickness, blur, bezel, specular } = useGlassStore((state) => state);
+  const storeState = useGlassStore((state) => state);
   const panelRef = useRef<HTMLDivElement>(null);
 
   useGlassRegion(panelRef, { radius: 16 });
@@ -65,7 +84,7 @@ export function GlassTuningPanel(): JSX.Element | null {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  if (!visible) {
+  if (!storeState.visible) {
     return null;
   }
 
@@ -79,89 +98,27 @@ export function GlassTuningPanel(): JSX.Element | null {
         Glass Dev Tuning
       </h3>
       <p style={{ margin: '0.32rem 0 1rem', fontSize: '0.74rem', color: 'rgba(45, 37, 32, 0.72)' }}>
-        Toggle with Ctrl + `
+        Toggle with Ctrl + ` | archisvaze/liquid-glass parity
       </p>
 
       <div style={sectionStyle}>
-        <label>
-          <div style={labelRowStyle}>
-            <span>IOR</span>
-            <span>{ior.toFixed(2)}</span>
-          </div>
-          <input
-            type="range"
-            min="1"
-            max="3"
-            step="0.01"
-            value={ior}
-            onChange={(event) => handleChange('ior', event)}
-            style={sliderStyle}
-          />
-        </label>
-
-        <label>
-          <div style={labelRowStyle}>
-            <span>Thickness</span>
-            <span>{thickness.toFixed(2)}</span>
-          </div>
-          <input
-            type="range"
-            min="0"
-            max="3"
-            step="0.05"
-            value={thickness}
-            onChange={(event) => handleChange('thickness', event)}
-            style={sliderStyle}
-          />
-        </label>
-
-        <label>
-          <div style={labelRowStyle}>
-            <span>Blur</span>
-            <span>{blur.toFixed(1)} px</span>
-          </div>
-          <input
-            type="range"
-            min="0"
-            max="40"
-            step="0.5"
-            value={blur}
-            onChange={(event) => handleChange('blur', event)}
-            style={sliderStyle}
-          />
-        </label>
-
-        <label>
-          <div style={labelRowStyle}>
-            <span>Bezel</span>
-            <span>{bezel.toFixed(0)} px</span>
-          </div>
-          <input
-            type="range"
-            min="10"
-            max="100"
-            step="1"
-            value={bezel}
-            onChange={(event) => handleChange('bezel', event)}
-            style={sliderStyle}
-          />
-        </label>
-
-        <label>
-          <div style={labelRowStyle}>
-            <span>Specular</span>
-            <span>{specular.toFixed(2)}</span>
-          </div>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={specular}
-            onChange={(event) => handleChange('specular', event)}
-            style={sliderStyle}
-          />
-        </label>
+        {SLIDERS.map(({ key, label, min, max, step, format }) => (
+          <label key={key}>
+            <div style={labelRowStyle}>
+              <span>{label}</span>
+              <span>{format(storeState[key])}</span>
+            </div>
+            <input
+              type="range"
+              min={min}
+              max={max}
+              step={step}
+              value={storeState[key]}
+              onChange={(event) => handleChange(key, event)}
+              style={sliderStyle}
+            />
+          </label>
+        ))}
       </div>
 
       <button type="button" onClick={() => glassStore.resetToDefaults()} style={resetButtonStyle}>

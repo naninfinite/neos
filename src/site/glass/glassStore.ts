@@ -6,6 +6,8 @@ export interface GlassMaterialPreset {
   blur: number;
   bezel: number;
   specular: number;
+  tint: number;
+  shadow: number;
 }
 
 export interface GlassStoreState extends GlassMaterialPreset {
@@ -24,10 +26,12 @@ type Listener = () => void;
 
 const DEFAULTS: GlassMaterialPreset = {
   ior: 3.0,
-  thickness: 1.6,
-  blur: 2.0,
+  thickness: 50,
+  blur: 1.5,
   bezel: 60,
-  specular: 0.5,
+  specular: 0.55,
+  tint: 0.08,
+  shadow: 0.5,
 };
 
 const STORAGE_KEY = 'neos_glass_preset';

@@ -97,7 +97,7 @@ export function SiteShell(): JSX.Element {
   const activeLabel = activeChannel === null ? 'HOME' : CHANNEL_LABELS[activeChannel];
 
   return (
-    <main aria-label="Site shell" style={shellStyle}>
+    <main id="site-shell-bg" aria-label="Site shell" style={shellStyle}>
       <GlassCanvas />
       <GlassTuningPanel />
 
