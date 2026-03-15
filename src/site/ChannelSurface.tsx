@@ -3,6 +3,11 @@ import { ConnectChannel } from '../apps/connect-exe/ConnectChannel';
 import { useGlassRegion } from './glass/useGlassRegion';
 import type { SiteChannel } from './siteStore';
 
+// Glass hierarchy:
+// - Heavy WebGL glass: navbar (SiteShell), hero card — navigation + cinematic showcase
+// - CSS support glass: intro, stack cards, placeholder — support material, lighter frost
+// - Readability veils: frosted backing behind text inside heavy glass surfaces
+
 interface ChannelSurfaceProps {
   activeChannel: SiteChannel;
   onSelectChannel(channel: SiteChannel): void;
@@ -56,20 +61,18 @@ const viewportStyle: CSSProperties = {
   zIndex: 1,
   flex: 1,
   minHeight: 0,
-  border: '1px solid rgba(255, 255, 255, 0.72)',
-  borderRadius: '24px',
-  background: 'rgba(255, 255, 255, 0.06)',
-  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.7), 0 18px 40px rgba(120, 90, 60, 0.18)',
-  padding: '1rem',
+  padding: '0.25rem',
   display: 'grid',
   alignContent: 'start',
   gap: '1rem',
 };
 
 const introStyle: CSSProperties = {
-  border: '1px solid rgba(255, 255, 255, 0.66)',
+  border: '1px solid rgba(255, 255, 255, 0.62)',
   borderRadius: '18px',
-  background: 'rgba(255, 255, 255, 0.08)',
+  background: 'rgba(255, 255, 255, 0.14)',
+  backdropFilter: 'blur(16px) saturate(1.3)',
+  WebkitBackdropFilter: 'blur(16px) saturate(1.3)',
   padding: '1rem 1.05rem',
 };
 
@@ -124,11 +127,21 @@ const heroCardStyle: CSSProperties = {
   flex: '1 1 42rem',
   borderRadius: '22px',
   border: '1px solid rgba(255,255,255,0.68)',
-  background: 'rgba(255, 255, 255, 0.08)',
+  background: 'rgba(255, 255, 255, 0.04)',
   padding: '1.1rem',
   display: 'grid',
   gap: '1rem',
   minHeight: '25rem',
+};
+
+/* Readability veil: frosted backing behind text blocks inside glass surfaces.
+   Ensures text stays legible while surrounding glass refracts freely. */
+const readabilityVeilStyle: CSSProperties = {
+  borderRadius: '14px',
+  background: 'rgba(255, 255, 255, 0.18)',
+  backdropFilter: 'blur(18px) saturate(1.4)',
+  WebkitBackdropFilter: 'blur(18px) saturate(1.4)',
+  padding: '0.9rem 1rem',
 };
 
 const heroHeaderStyle: CSSProperties = {
@@ -232,7 +245,9 @@ const stackStyle: CSSProperties = {
 const stackIntroStyle: CSSProperties = {
   borderRadius: '18px',
   border: '1px solid rgba(255,255,255,0.62)',
-  background: 'rgba(255,255,255,0.08)',
+  background: 'rgba(255,255,255,0.12)',
+  backdropFilter: 'blur(16px) saturate(1.3)',
+  WebkitBackdropFilter: 'blur(16px) saturate(1.3)',
   padding: '0.95rem',
   color: 'rgba(45, 37, 32, 0.82)',
 };
@@ -240,7 +255,9 @@ const stackIntroStyle: CSSProperties = {
 const stackCardStyle: CSSProperties = {
   borderRadius: '18px',
   border: '1px solid rgba(255,255,255,0.62)',
-  background: 'rgba(255,255,255,0.08)',
+  background: 'rgba(255,255,255,0.12)',
+  backdropFilter: 'blur(16px) saturate(1.3)',
+  WebkitBackdropFilter: 'blur(16px) saturate(1.3)',
   padding: '0.95rem',
   display: 'grid',
   gap: '0.72rem',
@@ -282,7 +299,9 @@ const stackCardActionRowStyle: CSSProperties = {
 const placeholderStyle: CSSProperties = {
   borderRadius: '20px',
   border: '1px solid rgba(255,255,255,0.66)',
-  background: 'rgba(255,255,255,0.08)',
+  background: 'rgba(255,255,255,0.12)',
+  backdropFilter: 'blur(16px) saturate(1.3)',
+  WebkitBackdropFilter: 'blur(16px) saturate(1.3)',
   padding: '1.1rem',
   display: 'grid',
   gap: '0.75rem',
@@ -320,11 +339,9 @@ function GlassCard({
   onPromote: (id: ChannelCard['id']) => void;
   onEnter: (id: ChannelCard['id']) => void;
 }): JSX.Element {
-  const ref = useRef<HTMLElement>(null);
-  useGlassRegion(ref, { radius: 18 });
-
+  // Stack cards use CSS glass (support tier), not heavy WebGL glass
   return (
-    <article ref={ref} style={{ ...stackCardStyle, ...(isFeatured ? stackCardActiveStyle : {}) }}>
+    <article style={{ ...stackCardStyle, ...(isFeatured ? stackCardActiveStyle : {}) }}>
       <div>
         <p style={stackCardTitleStyle}>{channel.name}</p>
         <p style={stackCardSubStyle}>{channel.subtitle}</p>
@@ -355,11 +372,9 @@ function ChannelPlaceholder({
   onGoHome: () => void;
   onFeatureChannel: (id: ChannelCard['id']) => void;
 }): JSX.Element {
-  const ref = useRef<HTMLDivElement>(null);
-  useGlassRegion(ref, { radius: 20 });
-
+  // Placeholder uses CSS glass (support tier), not heavy WebGL
   return (
-    <section ref={ref} style={placeholderStyle}>
+    <section style={placeholderStyle}>
       <p style={introKickerStyle}>Channel entry</p>
       <h2 style={placeholderTitleStyle}>{activeLabel} placeholder</h2>
       <p style={placeholderCopyStyle}>
@@ -395,8 +410,8 @@ export function ChannelSurface({ activeChannel, onSelectChannel }: ChannelSurfac
   const introRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
 
-  useGlassRegion(viewportRef, { radius: 24 });
-  useGlassRegion(introRef, { radius: 18 });
+  // Only the hero gets heavy WebGL glass — viewport and intro use CSS glass (support tier)
+  // This avoids glass-on-glass which Apple's guidelines warn against
   useGlassRegion(heroRef, { radius: 22 });
 
   const featuredChannel =
@@ -425,7 +440,8 @@ export function ChannelSurface({ activeChannel, onSelectChannel }: ChannelSurfac
       ) : activeChannel === 'home' || activeChannel === null ? (
         <div style={homeLayoutStyle}>
           <article ref={heroRef} style={heroCardStyle}>
-            <header style={heroHeaderStyle}>
+            {/* Readability veil wraps the header text */}
+            <header style={{ ...heroHeaderStyle, ...readabilityVeilStyle }}>
               <div>
                 <p style={heroEyebrowStyle}>Featured channel</p>
                 <h2 style={heroNameStyle}>{featuredChannel.name}</h2>
@@ -434,12 +450,14 @@ export function ChannelSurface({ activeChannel, onSelectChannel }: ChannelSurfac
               <span style={heroStatusChipStyle}>{featuredChannel.status}</span>
             </header>
 
-            <div style={{ display: 'grid', gap: '0.72rem' }}>
+            {/* Readability veil wraps the body text */}
+            <div style={{ ...readabilityVeilStyle, display: 'grid', gap: '0.72rem' }}>
               <p style={heroSummaryStyle}>{featuredChannel.summary}</p>
               <p style={heroDetailStyle}>{featuredChannel.detail}</p>
             </div>
 
-            <div style={heroFooterStyle}>
+            {/* Readability veil wraps the footer */}
+            <div style={{ ...heroFooterStyle, ...readabilityVeilStyle }}>
               <div style={heroStatusRowStyle}>
                 <span style={heroStatusChipStyle}>Explicit entry only</span>
                 <span style={heroStatusChipStyle}>No shared channel state</span>

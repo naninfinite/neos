@@ -13,7 +13,7 @@ const shellStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   gap: '0.9rem',
-  padding: '0.9rem',
+  padding: '1.2rem 1.6rem',
   background:
     'radial-gradient(circle at 14% 16%, rgba(255, 245, 235, 0.95), rgba(248, 232, 216, 0.88) 42%, transparent 70%), radial-gradient(circle at 85% 80%, rgba(228, 180, 140, 0.7), transparent 46%), linear-gradient(145deg, #f5e6d3 0%, #e8d5c4 35%, #d4a574 65%, #c4956a 100%)',
 };
@@ -21,12 +21,15 @@ const shellStyle: CSSProperties = {
 const topBarStyle: CSSProperties = {
   position: 'relative',
   zIndex: 1,
+  alignSelf: 'center',
+  maxWidth: '72rem',
+  width: '100%',
   border: '1px solid rgba(255, 255, 255, 0.76)',
-  borderRadius: '16px',
+  borderRadius: '999px',
   background: 'rgba(255, 255, 255, 0.06)',
   boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.75), 0 10px 30px rgba(120, 90, 60, 0.16)',
-  minHeight: '58px',
-  padding: '0.75rem 0.95rem',
+  minHeight: '52px',
+  padding: '0.55rem 1.2rem',
   display: 'grid',
   gridTemplateColumns: 'auto 1fr auto',
   alignItems: 'center',
@@ -92,7 +95,7 @@ export function SiteShell(): JSX.Element {
   const completeBoot = useSiteStore((store) => store.completeBoot);
 
   const headerRef = useRef<HTMLElement>(null);
-  useGlassRegion(headerRef, { radius: 16 });
+  useGlassRegion(headerRef, { radius: 26 });
 
   const activeLabel = activeChannel === null ? 'HOME' : CHANNEL_LABELS[activeChannel];
 
