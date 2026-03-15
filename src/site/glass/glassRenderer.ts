@@ -14,11 +14,7 @@ import { getRegions } from './glassRegistry';
 
 /* ── Glass tuning knobs ──────────────────────────────────── */
 
-const IOR       = 3.0;    // index of refraction — matches reference (high distortion)
-const THICKNESS = 1.6;    // refraction strength
-const BLUR      = 2.0;    // Poisson blur radius (px) — nearly clear like reference
-const BEZEL     = 60.0;   // edge bevel width (px)
-const SPECULAR  = 0.5;    // rim light strength — matches reference
+import { glassStore } from './glassStore';
 
 /* ── Helpers ─────────────────────────────────────────────── */
 
@@ -238,11 +234,12 @@ export function createGlassRenderer(canvas: HTMLCanvasElement): () => void {
     }
 
     // Global glass params
-    gl.uniform1f(loc.ior, IOR);
-    gl.uniform1f(loc.thickness, THICKNESS);
-    gl.uniform1f(loc.blur, BLUR);
-    gl.uniform1f(loc.bezel, BEZEL);
-    gl.uniform1f(loc.specular, SPECULAR);
+    const { ior, thickness, blur, bezel, specular } = glassStore.getState();
+    gl.uniform1f(loc.ior, ior);
+    gl.uniform1f(loc.thickness, thickness);
+    gl.uniform1f(loc.blur, blur);
+    gl.uniform1f(loc.bezel, bezel);
+    gl.uniform1f(loc.specular, specular);
 
     // Background texture (unit 0)
     gl.activeTexture(gl.TEXTURE0);
