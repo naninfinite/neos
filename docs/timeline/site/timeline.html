@@ -18,7 +18,7 @@
           looked like at that step.
         </p>
         <p class="muted">
-          Current coverage: Stage 1A (original) → SHELL-01A/01B (v2 desktop shell) → SITE-SHELL-01 (liquid glass root) → SITE-SHELL-01B (WebGL2 refraction renderer).
+          Current coverage: Stage 1A (original) → SHELL-01A/01B (v2 desktop shell) → SITE-SHELL-01 (liquid glass root) → SITE-SHELL-01B (WebGL2 refraction renderer) → SITE-SHELL-02 (Hard Reset) → SITE-SHELL-03 (Navigation Bar).
         </p>
       </section>
 
@@ -30,7 +30,7 @@
           lives inside ME.EXE as an isolated channel.
         </p>
         <ul>
-          <li>Active lane: SITE-SHELL — liquid glass channel surface.</li>
+          <li>Active lane: SITE-SHELL — rebuild phase after hard reset.</li>
           <li>Phase 2 (deferred): ME-DESKTOP — OS desktop wired into ME.EXE.</li>
           <li>CONNECT-IMPLEMENTATION is frozen.</li>
           <li>The SHELL-01A/01B OS desktop code is preserved for ME-DESKTOP.</li>
@@ -41,7 +41,9 @@
             <li>Stage 1A (original): First shell UI pass — liquid glass channel navigation</li>
             <li>SHELL-01A/01B (v2 build): OS desktop shell frame — re-scoped to ME.EXE</li>
             <li>SITE-SHELL-01: Liquid glass channel surface mounted as site root</li>
-            <li>SITE-SHELL-01B: WebGL2 liquid glass renderer — reference-calibrated refraction, warm neutral palette (current)</li>
+            <li>SITE-SHELL-01B: WebGL2 liquid glass renderer — reference-calibrated refraction</li>
+            <li>SITE-SHELL-02: Hard reset — surface layer stripped to blank canvas for coordinated rebuild</li>
+            <li>SITE-SHELL-03: Persistent navigation bar — warm neutral palette, Font Awesome icons</li>
             <li>ME-DESKTOP: OS desktop wired into ME.EXE (Phase 2)</li>
             <li>Other channels: YOU.EXE, THIRD.EXE (Phase 3)</li>
           </ol>
@@ -272,17 +274,91 @@ float surfaceHeight(float t) {
         </p>
       </section>
 
+      <article class="milestone">
+        <p class="kicker">SITE-SHELL-02</p>
+        <h2>Hard Reset: Blank Canvas Rebuild</h2>
+        <p>
+          After a period of rapid multi-agent iteration led to visual churn, the decision
+          was made to perform a "hard reset" on the site's surface layer.
+        </p>
+        <p>
+          This milestone stripped `SiteShell.tsx` and `ChannelSurface.tsx` to their
+          foundational structures, removing competing inline styles and complex
+          layouts. This created a clean, predictable baseline for rebuilding
+          the project one component at a time through coordinated agent planning.
+        </p>
+        <figure>
+          <img
+            src="../assets/05-site-shell-02-hard-reset/site-shell-02-hard-reset-blank-shell.png"
+            alt="SITE-SHELL-02 hard reset — a clean, blank warm-neutral canvas"
+          />
+          <figcaption>
+            Hard reset baseline: a blank warm-neutral page ready for coordinated
+            reconstruction. All infrastructure (glass module, store, apps) was
+            preserved.
+          </figcaption>
+        </figure>
+      </article>
+
+      <article class="milestone">
+        <p class="kicker">SITE-SHELL-03</p>
+        <h2>Persistent Navigation Bar</h2>
+        <p>
+          The first component rebuilt after the hard reset was the persistent
+          navigation bar. The team coordinated through agentchattr to lock the
+          design: a unified top bar with a warm neutral palette (D-22/D-26).
+        </p>
+        <p>
+          The nav bar uses Font Awesome house icons for the HOME tab and a subtle
+          lift animation for active states. It sits on the same background plane
+          as the page, satisfying the "uniform field" constraint.
+        </p>
+        <h3>What this established</h3>
+        <ul>
+          <li>A persistent `SiteNav` component wired to the global `siteStore`.</li>
+          <li>Warm neutral palette: `#f5e6d3` background, `#2d2520` text, `#c4956a` accent.</li>
+          <li>Subtle active-tab lift animation: `translateY(-2px)`.</li>
+          <li>Accessible `srOnly` labels and Font Awesome icon integration.</li>
+          <li>CONNECT.EXE placeholder visible but disabled in the nav.</li>
+        </ul>
+        <figure>
+          <img
+            src="../assets/06-site-shell-03/site-shell-03-nav-warm-neutral.png"
+            alt="SITE-SHELL-03 navigation bar — warm neutral palette with persistent top nav"
+          />
+          <figcaption>
+            SITE-SHELL-03: The rebuilt navigation bar with Font Awesome house
+            icons and warm neutral palette.
+          </figcaption>
+        </figure>
+      </article>
+
+      <section class="code-card">
+        <p class="kicker">Important code — SITE-SHELL-03</p>
+        <h3>Unified Navigation Structure</h3>
+        <pre><code>const CHANNELS: ChannelEntry[] = [
+  { id: 'home', label: 'HOME', icon: 'house' },
+  { id: 'me', label: 'ME.EXE' },
+  { id: 'you', label: 'YOU.EXE' },
+  { id: 'third', label: 'THIRD.EXE' },
+  { id: 'connect', label: 'CONNECT.EXE', disabled: true },
+];</code></pre>
+        <p>
+          The navigation uses a data-driven approach to render channels, making it
+          easy to add future channels or disable unimplemented ones.
+        </p>
+      </section>
+
       <section class="section">
         <h2>Next Milestone Focus</h2>
         <p>
-          SITE-SHELL-02 should deepen channel navigation behavior while keeping
-          the site shell lightweight and isolated from ME desktop runtime.
+          SITE-SHELL-04 will focus on channel routing and content surfaces.
         </p>
         <ul>
-          <li>Polish channel-entry interactions and transitions.</li>
-          <li>Keep all heavy runtime mounts deferred to channel internals.</li>
-          <li>Maintain ME-DESKTOP code unmounted at site level.</li>
-          <li>Prepare clean handoff to ME-DESKTOP-01 (Phase 2).</li>
+          <li>Refactor `ChannelSurface.tsx` into a clean active-channel switcher.</li>
+          <li>Implement lightweight placeholder surfaces for each channel.</li>
+          <li>Ensure navigation clicks correctly update the viewport content.</li>
+          <li>Maintain the warm neutral D-22/D-26 aesthetic.</li>
         </ul>
       </section>
     </main>
