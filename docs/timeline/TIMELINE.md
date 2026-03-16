@@ -28,14 +28,11 @@ It is written to make the project understandable to both technical and non-techn
 
 ## Current status
 
-**Architecture direction updated 2026-03-14.**
+**Hard reset completed 2026-03-16.**
 
-The project has confirmed its product direction: the site root is a liquid glass channel surface (light, transparent, glassmorphic). The OS desktop experience lives inside ME.EXE as an isolated channel.
+After completing SITE-SHELL-01 and SITE-SHELL-01B, repeated iterations on the liquid glass surface created churn without convergence. Multiple AI agents pushed competing visual directions in parallel, and the surface layer grew unwieldy. The decision was made to hard reset the home page to a blank canvas and rebuild incrementally with coordinated planning via agentchattr.
 
-SITE-SHELL-01 and SITE-SHELL-01B are now complete.
-
-SITE-SHELL-01 wired the site root to a liquid glass channel surface structure.
-SITE-SHELL-01B added a raw WebGL2 refraction renderer (`src/site/glass/`), calibrated to the archisvaze/liquid-glass reference parameters, and replaced the blue palette with warm neutral tones.
+The site currently renders a blank warm-neutral page. All infrastructure is intact: the glass module, store, windowing, apps, and config are preserved. Rebuilding will proceed one piece at a time with agent coordination.
 
 The SHELL-01A/01B OS desktop code remains preserved and will be integrated into ME.EXE in Phase 2.
 
@@ -52,15 +49,16 @@ non-technical reviewers.
 
 ### Planned next milestones
 
-- SITE-SHELL-02 — channel navigation and routing polish
-- SITE-SHELL-03 — site boot/entry refinement
+- SITE-SHELL-03 — navigation bar rebuild (coordinated via agentchattr)
+- SITE-SHELL-04 — channel routing and content surfaces
+- SITE-SHELL-05 — glass re-integration (when layout is stable)
 - ME-DESKTOP-01 — OS desktop wired into ME.EXE channel (Phase 2)
 
 ### What reviewers should expect next
 
-- The site shell will gain richer navigation behavior while staying lightweight
-- Screenshots will continue showing light liquid-glass direction
-- ME.EXE will then reveal the OS desktop experience when entered
+- Incremental rebuilding from a blank page, one component at a time
+- Agent coordination through agentchattr before implementation
+- Glass effects will return once the layout foundation is stable
 
 ### Completed milestone highlights
 
@@ -68,3 +66,4 @@ non-technical reviewers.
 - SHELL-01A (v2) — desktop shell frame + boot gate + static taskbar, contract-first v2 rewrite with Playwright screenshots (`docs/timeline/milestones/02-shell-01a-desktop-frame.md`)
 - SITE-SHELL-01 — liquid glass channel surface mounted as new site root (`docs/timeline/milestones/03-site-shell-01-liquid-glass-root.md`)
 - SITE-SHELL-01B — WebGL2 liquid glass renderer added; visual refinement to warm neutral palette, reference-calibrated refraction (`docs/timeline/milestones/04-site-shell-01b-webgl-glass-renderer.md`)
+- SITE-SHELL-02 — Hard reset: surface layer stripped to blank canvas after liquid glass churn; infrastructure preserved, rebuild planned via agentchattr (`docs/timeline/milestones/05-site-shell-02-hard-reset.md`)
