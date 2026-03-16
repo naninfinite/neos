@@ -13,11 +13,12 @@ Agent roles are defined in:
 
 Authority order:
 
-1. SOURCE_OF_TRUTH.md
-2. Architecture documents
-3. Claude — architecture guard
-4. Codex — implementation
-5. Gemini — validation
+1. `docs/spec/05-implementation-decisions-lock.md`
+2. `docs/spec/SOURCE_OF_TRUTH.md`
+3. `docs/spec/03-type-contracts.md`
+4. `docs/spec/02-runtime-architecture.md`
+5. `docs/spec/01-blueprint.md`
+6. `docs/spec/04-issues-register.md` (reference only)
 
 Rules:
 
@@ -25,8 +26,8 @@ Rules:
 - Codex writes implementation
 - Gemini validates results
 - Do not redefine roles unless explicitly instructed
-- Before doing any work, use workflow-router to choose and load the relevant skill from .agents/skills, then follow SOURCE_OF_TRUTH.md authority order.
-- Use workflow-router to determine which skills apply.
+- Before doing any work, read `docs/agents/AGENT_HUB.md` for current project state and staged roadmap
+- Use agentchattr #00-orchestration for coordination before implementing
 
 Timeline rule (non-negotiable):
 
@@ -44,20 +45,22 @@ Codex triggers this pipeline after implementation. Gemini checks it during valid
 
 If Playwright is not available, agents must stop and tell the user before skipping any visual step.
 
-Active architecture (as of 2026-03-14):
+Active architecture (as of 2026-03-16):
 
-- Site root = liquid glass channel surface (`src/site/`) — warm neutral, transparent, glassmorphic
-- WebGL2 glass renderer lives in `src/site/glass/` — raw WebGL2, no Three.js (D-25)
+- Site root = blank canvas after hard reset — rebuilding incrementally via agentchattr
+- WebGL2 glass renderer preserved in `src/site/glass/` — not currently mounted, ready for re-integration
 - Colour palette: warm neutral (`#f5e6d3 → #c4956a`), warm dark text (`#2d2520`) — no blue (D-26)
 - ME.EXE = OS desktop experience (windowing, taskbar, launcher, apps) — isolated channel
 - Each channel is isolated; channels do not share state with each other or the site shell
 - `src/main.tsx` mounts `SiteShell`, not `OsBootstrap`
 - `src/desktop/` code is scoped to ME.EXE (Phase 2); do not mount it at site root
 
-Active lane: SITE-SHELL
-Completed: SITE-SHELL-01 (structure), SITE-SHELL-01B (WebGL2 glass + visual refinement)
-Frozen lanes: ME-DESKTOP (Phase 2), CHANNEL-YOU, CHANNEL-THIRD, CONNECT-IMPLEMENTATION
+Active lane: SITE-SHELL (rebuilding from blank canvas)
+Completed: SITE-SHELL-01 (structure), SITE-SHELL-01B (WebGL2 glass), SITE-SHELL-02 (hard reset)
+Deferred lanes: ME-DESKTOP (Phase 2), CHANNEL-YOU, CHANNEL-THIRD
+Separate active lane: CONNECT-IMPLEMENTATION (do not let it drive the site-shell / ME.EXE critical path)
 
+Read `docs/agents/AGENT_HUB.md` first for current state and staged roadmap.
 Read `docs/spec/05-implementation-decisions-lock.md` D-20 through D-26 before any implementation.
 
-Continue from the latest milestone or open task.
+Continue from the staged roadmap in AGENT_HUB.md.

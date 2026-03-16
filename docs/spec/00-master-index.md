@@ -8,8 +8,8 @@ Use this pack to keep product direction, runtime architecture, implementation co
 
 ## Recommended read order
 
-1. `SOURCE_OF_TRUTH.md`
-2. `05-implementation-decisions-lock.md`
+1. `05-implementation-decisions-lock.md`
+2. `SOURCE_OF_TRUTH.md`
 3. `03-type-contracts.md`
 4. `02-runtime-architecture.md`
 5. `01-blueprint.md`
@@ -60,7 +60,7 @@ The project name is **not locked**. A future rename is allowed without changing 
 
 ## Build readiness
 
-This pack is ready for implementation **provided AgentChatTR follows `SOURCE_OF_TRUTH.md` first** and does not improvise around unresolved or superseded behaviour.
+This pack is ready for implementation **provided AgentChatTR follows the locked authority order** and does not improvise around unresolved or superseded behaviour.
 
 ## Suggested repo structure
 

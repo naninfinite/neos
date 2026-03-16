@@ -3,7 +3,7 @@
 ## Project
 
 **Working title:** Terminal-OS v2
-**Status:** architecture direction updated — channel surface as site root, OS inside ME.EXE
+**Status:** surface hard reset 2026-03-16 — rebuilding from blank canvas with coordinated planning
 **Phase:** fresh rewrite in this repo; legacy project is read-only reference
 
 ## Project definition
@@ -76,7 +76,7 @@ The following belong inside ME.EXE, not at the site root:
 
 - YOU.EXE: social / message-board surface (isolated runtime)
 - THIRD.EXE: three.js / 3D world-building surface (isolated runtime)
-- CONNECT.EXE: frozen, not in initial scope
+- CONNECT.EXE: active as a separate implementation lane, but not part of the current site-shell / ME.EXE critical path
 
 ### Out of scope unless separately re-locked later
 
@@ -84,7 +84,7 @@ The following belong inside ME.EXE, not at the site root:
 - server-first architecture
 - route-based app navigation
 - desktop icon position persistence
-- CONNECT.EXE as a required launch-day app
+- CONNECT.EXE as a required launch-day app or platform-driving dependency
 
 ## Non-negotiable architectural rules
 
@@ -119,10 +119,15 @@ Before Codex starts any task, it should confirm:
 
 ## Kickoff milestone order
 
-**Phase 1 — Site shell (current priority)**
-1. Implement liquid glass channel surface as site root (`src/site/`)
-2. Channel navigation and routing
-3. Boot / entry sequence for the site
+**Phase 1 — Site shell (current priority — rebuilding after hard reset)**
+1. ~~Implement liquid glass channel surface as site root (`src/site/`)~~ Done then reset
+2. Navigation bar rebuild (Stage R1)
+3. Channel routing and content surfaces (Stage R2)
+4. Home channel content (Stage R3)
+5. Glass re-integration (Stage R4)
+6. Boot sequence and polish (Stage R5)
+
+See `docs/agents/AGENT_HUB.md` for the detailed staged roadmap.
 
 **Phase 2 — ME.EXE OS desktop**
 4. Wire existing `src/desktop/` shell code into ME.EXE channel

@@ -1,18 +1,16 @@
 # First Tasks
 
-## T-01 — Runtime skeleton
+> **Note (2026-03-16):** These were the original kickoff tasks. T-01 is partially complete (scaffold exists). For the current staged roadmap, see `docs/agents/AGENT_HUB.md`.
+
+## T-01 — Runtime skeleton (partially complete)
 
 ### Goal
 
 Create the initial runtime-shaped scaffold in `src/` so the repo matches the type contracts and runtime architecture at a high level.
 
-### Scope
+### Status
 
-- create placeholder files/folders for shell structure
-- preserve the existing placeholder UI
-- do not implement real apps yet
-- no visual polish
-- no legacy imports
+Partially complete. Folder structure exists (`src/site/`, `src/desktop/`, `src/windowing/`, `src/core/`, `src/services/`, `src/ui/`, `src/apps/`). Site shell surface was reset to blank canvas on 2026-03-16. Further scaffold work is now tracked in AGENT_HUB.md Lane 1 (site shell) and Lane 2 (ME.EXE integration).
 
 ### Authority docs
 
@@ -20,19 +18,6 @@ Create the initial runtime-shaped scaffold in `src/` so the repo matches the typ
 - `docs/spec/SOURCE_OF_TRUTH.md`
 - `docs/spec/03-type-contracts.md`
 - `docs/spec/02-runtime-architecture.md`
-
-### Deliverables
-
-- folder/file scaffold aligned to contracts
-- minimal placeholder modules where appropriate
-- clean imports
-- no speculative app behaviour
-
-### Validation
-
-- app still runs
-- typecheck/build still passes
-- Gemini confirms no contradiction with spec
 
 ### Timeline impact
 

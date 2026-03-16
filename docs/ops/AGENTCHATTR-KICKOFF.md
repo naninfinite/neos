@@ -49,13 +49,12 @@ Do not update the timeline for tiny invisible refactors unless they materially a
 
 ## Current status
 
-The repo has been re-initialised with:
-- spec pack
-- root guidance docs
-- placeholder shell
-- first timeline milestone
-- early Playwright/timeline export workflow
+**Updated 2026-03-16 — post hard reset.**
+
+The site shell surface was stripped to a blank canvas after liquid glass iterations created churn. All infrastructure is preserved (glass module, stores, windowing, apps, config). Rebuilding proceeds incrementally with agent coordination via agentchattr.
+
+For full current state and staged roadmap, see `docs/agents/AGENT_HUB.md`.
 
 ## Immediate goal
 
-Establish the runtime skeleton before implementing real apps.
+Rebuild the site shell one piece at a time, starting with Lane 1 S-01 (navigation bar). See AGENT_HUB.md for the full execution order.
