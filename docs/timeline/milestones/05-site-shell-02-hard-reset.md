@@ -52,6 +52,31 @@ This is a process milestone, not a feature milestone. It acknowledges that the m
 
 We tried building the home page with multiple AI agents working in parallel, and while each agent did good work individually, the result kept changing direction without settling. Rather than continue the cycle, we wiped the screen clean and decided to rebuild step by step, with all agents coordinating through a shared chat channel before writing code.
 
+## What the UI looked like
+
+- A full-page warm neutral background with no mounted navigation or cards
+- No active glass canvas or registered glass regions
+- No boot overlay or route chrome at the site root
+- A deliberately empty page that marks the new rebuild baseline
+
+![SITE-SHELL-02 hard reset blank shell](../assets/05-site-shell-02-hard-reset/site-shell-02-hard-reset-blank-shell.png)
+
+## Important code
+
+```tsx
+export function SiteShell(): JSX.Element {
+  return (
+    <main id="site-shell-bg" aria-label="Site shell" style={shellStyle}>
+      {/* Blank canvas — rebuild one piece at a time */}
+    </main>
+  );
+}
+```
+
+## Code explained simply
+
+The root component now renders a single dependable container and nothing else. That gives the team a clean baseline before any new nav, cards, or glass effects are added back.
+
 ## Architecture notes
 
 - The glass module is fully preserved and can be re-integrated when the layout is ready for it
