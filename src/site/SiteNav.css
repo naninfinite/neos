@@ -1,0 +1,83 @@
+.siteNav {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-taskbar);
+  display: flex;
+  align-items: center;
+  height: var(--channel-bar-height);
+  padding: 0 var(--space-4);
+  background: var(--color-nav-surface);
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  user-select: none;
+}
+
+.siteNav-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  margin-right: var(--space-8);
+  color: var(--color-text-primary);
+}
+
+.siteNav-channels {
+  display: flex;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.siteNav-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  border: none;
+  background: transparent;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    color 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.siteNav-tab:hover {
+  color: var(--color-text-primary);
+  background: var(--color-nav-active);
+}
+
+.siteNav-tab--active {
+  color: var(--color-accent-primary);
+  background: var(--color-nav-active);
+  transform: translate(-1px, -2px);
+  font-weight: 600;
+}
+
+.siteNav-tabIcon {
+  font-size: 13px;
+}
+
+.siteNav-tab--disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.siteNav-tab--disabled:hover {
+  color: var(--color-text-secondary);
+  background: transparent;
+}
+
+.siteNav-status {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.03em;
+}
